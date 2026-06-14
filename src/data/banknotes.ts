@@ -632,7 +632,7 @@ export const getBanknotesByTag = (tagName: string): Banknote[] => {
   return banknotes.filter(b => b.tags.includes(tagName));
 };
 
-export const getRelatedTags = (tagName: string, limit: number = 10): TagInfo[] => {
+export const getRelatedTags = (tagName: string, limit: number = 10): (TagInfo & { coOccurrence: number })[] => {
   const targetBanknotes = getBanknotesByTag(tagName);
   const coOccurrence = new Map<string, number>();
   targetBanknotes.forEach(b => {
@@ -644,12 +644,12 @@ export const getRelatedTags = (tagName: string, limit: number = 10): TagInfo[] =
   });
   const allTags = getAllTags();
   return Array.from(coOccurrence.entries())
-    .map(([name, count]) => {
+    .map(([name, coCount]) => {
       const info = allTags.find(t => t.name === name);
-      return info ? { ...info, count } : null;
+      return info ? { ...info, coOccurrence: coCount } : null;
     })
-    .filter((t): t is TagInfo & { count: number } => t !== null)
-    .sort((a, b) => b.count - a.count)
+    .filter((t): t is (TagInfo & { coOccurrence: number }) => t !== null)
+    .sort((a, b) => b.coOccurrence - a.coOccurrence)
     .slice(0, limit);
 };
 

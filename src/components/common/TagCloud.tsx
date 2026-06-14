@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import type { TagInfo } from '@/data/banknotes';
+import TagWithTooltip from '@/components/common/TagWithTooltip';
 import { cn } from '@/utils/cn';
 
 interface TagCloudProps {
@@ -21,8 +21,7 @@ export default function TagCloud({ tags, maxFontSize = 28, minFontSize = 12, cla
       const ratio = (tag.count - minCount) / range;
       const fontSize = minFontSize + ratio * (maxFontSize - minFontSize);
       const opacity = 0.5 + ratio * 0.5;
-      const hoverScale = 1 + ratio * 0.15;
-      return { tag, fontSize, opacity, hoverScale };
+      return { tag, fontSize, opacity };
     });
   }, [tags, maxFontSize, minFontSize]);
 
@@ -38,22 +37,18 @@ export default function TagCloud({ tags, maxFontSize = 28, minFontSize = 12, cla
   return (
     <div className={cn('flex flex-wrap items-center justify-center gap-3 py-6', className)}>
       {tagStyles.map(({ tag, fontSize, opacity }, index) => (
-        <Link
+        <TagWithTooltip
           key={tag.name}
-          to={`/banknotes?tag=${encodeURIComponent(tag.name)}`}
-          className={cn(
-            'inline-block font-display transition-all duration-300 hover:scale-110 hover:opacity-100 hover:text-gold',
-            colors[index % colors.length]
-          )}
+          tagName={tag.name}
+          bare={true}
+          showPrefix={false}
+          className={colors[index % colors.length]}
           style={{
             fontSize: `${fontSize}px`,
             opacity,
             lineHeight: 1.4,
           }}
-          title={`${tag.name}: ${tag.count} 张纸币`}
-        >
-          {tag.name}
-        </Link>
+        />
       ))}
     </div>
   );

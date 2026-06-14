@@ -302,7 +302,7 @@ const categoryColorMap: Record<TagCategory, string> = {
 
 function RelatedTagsSection({ banknote }: { banknote: Banknote }) {
   const allRelatedTags = useMemo(() => {
-    const tags: ReturnType<typeof getRelatedTags> = [];
+    const tags: (ReturnType<typeof getRelatedTags>[number] & { coOccurrence: number })[] = [];
     const seen = new Set<string>();
     banknote.tags.forEach(tag => {
       getRelatedTags(tag, 6).forEach(related => {
@@ -353,7 +353,7 @@ function RelatedTagsSection({ banknote }: { banknote: Banknote }) {
                   <div className="font-display text-sm text-parchment group-hover:text-gold transition-colors">
                     #{tag.name}
                   </div>
-                  <div className="text-xs opacity-70">{category}</div>
+                  <div className="text-xs opacity-70">{category} · 共现 {tag.coOccurrence} 次</div>
                 </div>
               </div>
               <div className="text-right">
