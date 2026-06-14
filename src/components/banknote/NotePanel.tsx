@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useNoteStore } from '@/store/useNoteStore';
 import type { Note } from '@/types';
 import { cn } from '@/utils/cn';
+import { Button, IconButton, Panel, Input, Textarea, Card, Badge } from '@/components/ui';
 
 interface NotePanelProps {
   banknoteId: string;
@@ -88,37 +89,37 @@ export default function NotePanel({ banknoteId, banknoteTitle }: NotePanelProps)
         <div className="flex items-center gap-3">
           {!isAdding && !editingId && (
             <>
-              <Link
-                to="/notes"
-                className="btn-gold flex items-center gap-2"
+              <Button
+                variant="default"
+                leftIcon={LinkIcon}
+                asChild
               >
-                <LinkIcon size={16} />
-                全部笔记
-              </Link>
-              <button
+                <Link to="/notes">全部笔记</Link>
+              </Button>
+              <Button
+                variant="solid"
+                leftIcon={Plus}
                 onClick={handleStartAdd}
-                className="btn-gold-solid flex items-center gap-2"
               >
-                <Plus size={18} />
                 添加笔记
-              </button>
+              </Button>
             </>
           )}
         </div>
       </div>
 
       {(isAdding || editingId) && (
-        <div className="card-gold p-6 mb-8 animate-fade-in">
+        <Card padding="lg" className="mb-8 animate-fade-in">
           <div className="flex items-center justify-between mb-6">
             <h3 className="font-display text-xl text-parchment">
               {editingId ? '编辑笔记' : '新建笔记'}
             </h3>
-            <button
+            <IconButton
+              icon={X}
+              variant="ghost"
               onClick={resetForm}
-              className="text-gold-muted hover:text-gold transition-colors"
-            >
-              <X size={20} />
-            </button>
+              label="关闭"
+            />
           </div>
 
           <div className="space-y-4">
@@ -126,12 +127,11 @@ export default function NotePanel({ banknoteId, banknoteTitle }: NotePanelProps)
               <label className="block text-gold-muted text-sm font-display tracking-wider mb-2">
                 笔记标题
               </label>
-              <input
+              <Input
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder={`关于 ${banknoteTitle} 的学习笔记...`}
-                className="input-elegant"
               />
             </div>
 
@@ -139,12 +139,12 @@ export default function NotePanel({ banknoteId, banknoteTitle }: NotePanelProps)
               <label className="block text-gold-muted text-sm font-display tracking-wider mb-2">
                 笔记内容
               </label>
-              <textarea
+              <Textarea
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="记录您的学习心得、收藏背景、市场行情分析..."
                 rows={6}
-                className="input-elegant resize-y"
+                className="resize-y"
               />
             </div>
 
@@ -152,34 +152,33 @@ export default function NotePanel({ banknoteId, banknoteTitle }: NotePanelProps)
               <label className="block text-gold-muted text-sm font-display tracking-wider mb-2">
                 标签 <span className="text-xs">(用逗号分隔)</span>
               </label>
-              <input
+              <Input
                 type="text"
                 value={tags}
                 onChange={(e) => setTags(e.target.value)}
                 placeholder="收藏, 鉴赏, 市场价值, 历史背景..."
-                className="input-elegant"
               />
             </div>
 
             <div className="flex justify-end gap-3 pt-4">
-              <button onClick={resetForm} className="btn-gold">
+              <Button variant="default" onClick={resetForm}>
                 取消
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="solid"
+                leftIcon={Save}
                 onClick={editingId ? handleSaveEdit : handleAddNote}
-                className="btn-gold-solid flex items-center gap-2"
                 disabled={!title.trim() || !content.trim()}
               >
-                <Save size={16} />
                 {editingId ? '保存修改' : '保存笔记'}
-              </button>
+              </Button>
             </div>
           </div>
-        </div>
+        </Card>
       )}
 
       {banknoteNotes.length === 0 && !isAdding && (
-        <div className="card-gold p-12 text-center">
+        <Panel padding="xl" className="text-center">
           <BookOpen size={48} className="text-gold/30 mx-auto mb-4" />
           <p className="text-gold-muted font-body text-lg mb-4">
             还没有任何学习笔记
@@ -187,10 +186,10 @@ export default function NotePanel({ banknoteId, banknoteTitle }: NotePanelProps)
           <p className="text-gold-muted/60 font-body text-sm mb-6">
             记录您的收藏心得、鉴赏知识或市场分析
           </p>
-          <button onClick={handleStartAdd} className="btn-gold-solid">
+          <Button variant="solid" onClick={handleStartAdd}>
             写下第一篇笔记
-          </button>
-        </div>
+          </Button>
+        </Panel>
       )}
 
       {banknoteNotes.length > 0 && (
@@ -198,10 +197,11 @@ export default function NotePanel({ banknoteId, banknoteTitle }: NotePanelProps)
           {banknoteNotes.map((note) => {
             const isExpanded = expandedId === note.id;
             return (
-              <div
+              <Card
                 key={note.id}
+                padding="lg"
                 className={cn(
-                  'card-gold p-6 transition-all duration-300',
+                  'transition-all duration-300',
                   isExpanded && 'border-gold/50 shadow-gold-lg'
                 )}
               >
@@ -227,20 +227,19 @@ export default function NotePanel({ banknoteId, banknoteTitle }: NotePanelProps)
                     </div>
                   </div>
                   <div className="flex items-center gap-2 ml-4">
-                    <button
+                    <IconButton
+                      icon={Edit3}
+                      size="md"
                       onClick={() => handleEditNote(note)}
-                      className="w-10 h-10 rounded-full border border-gold/30 flex items-center justify-center text-gold-muted hover:text-gold hover:border-gold/50 transition-all"
-                      title="编辑"
-                    >
-                      <Edit3 size={16} />
-                    </button>
-                    <button
+                      label="编辑"
+                    />
+                    <IconButton
+                      icon={Trash2}
+                      size="md"
+                      variant="danger"
                       onClick={() => deleteNote(note.id)}
-                      className="w-10 h-10 rounded-full border border-red-500/30 flex items-center justify-center text-red-400 hover:text-red-300 hover:border-red-500/50 transition-all"
-                      title="删除"
-                    >
-                      <Trash2 size={16} />
-                    </button>
+                      label="删除"
+                    />
                   </div>
                 </div>
 
@@ -252,12 +251,13 @@ export default function NotePanel({ banknoteId, banknoteTitle }: NotePanelProps)
                     {note.tags.length > 0 && (
                       <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-gold/10">
                         {note.tags.map((tag, index) => (
-                          <span
+                          <Badge
                             key={index}
-                            className="px-3 py-1 bg-gold/10 text-gold text-sm rounded-sm border border-gold/20"
+                            variant="gold"
+                            size="md"
                           >
                             #{tag}
-                          </span>
+                          </Badge>
                         ))}
                       </div>
                     )}
@@ -269,7 +269,7 @@ export default function NotePanel({ banknoteId, banknoteTitle }: NotePanelProps)
                     {note.content}
                   </p>
                 )}
-              </div>
+              </Card>
             );
           })}
         </div>

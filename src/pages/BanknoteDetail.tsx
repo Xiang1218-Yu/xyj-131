@@ -14,6 +14,14 @@ import TagWithTooltip from '@/components/common/TagWithTooltip';
 import { formatNumber, getRarityLabel, getRarityColor, cn } from '@/utils/cn';
 import { countries } from '@/data/countries';
 import { getRelatedTags } from '@/data/banknotes';
+import {
+  IconButton,
+  Panel,
+  InfoGrid,
+  SectionTitle,
+  Badge,
+  Button,
+} from '@/components/ui';
 
 export default function BanknoteDetail() {
   const { id } = useParams<{ id: string }>();
@@ -52,9 +60,9 @@ export default function BanknoteDetail() {
             title="纸币不存在"
             description="您访问的纸币可能已被移除或ID不正确"
             action={
-              <Link to="/banknotes" className="btn-gold-solid">
-                返回列表
-              </Link>
+              <Button variant="solid" asChild>
+                <Link to="/banknotes">返回列表</Link>
+              </Button>
             }
           />
         </div>
@@ -124,29 +132,27 @@ export default function BanknoteDetail() {
                 </div>
               </div>
               <div className="flex gap-3">
-                <button
+                <IconButton
+                  icon={Heart}
+                  size="xl"
+                  variant={favorite ? 'solid' : 'default'}
+                  active={favorite}
                   onClick={handleFavoriteClick}
                   className={cn(
-                    'w-14 h-14 rounded-full border-2 flex items-center justify-center transition-all duration-300',
-                    favorite
-                      ? 'bg-gold border-gold text-background animate-bounce'
-                      : 'border-gold/30 text-gold hover:border-gold hover:bg-gold/10'
+                    favorite && 'animate-bounce [&>svg]:fill-current'
                   )}
-                  aria-label={favorite ? '取消收藏' : '收藏'}
-                >
-                  <Heart size={24} className={cn(favorite && 'fill-current')} />
-                </button>
-                <button
+                  label={favorite ? '取消收藏' : '收藏'}
+                />
+                <IconButton
+                  icon={Share2}
+                  size="xl"
                   onClick={share.open}
-                  className="w-14 h-14 rounded-full border-2 border-gold/30 flex items-center justify-center text-gold hover:border-gold hover:bg-gold/10 transition-all duration-300"
-                  aria-label="分享"
-                >
-                  <Share2 size={24} />
-                </button>
+                  label="分享"
+                />
               </div>
             </div>
 
-            <div className="flex items-center gap-4 mb-8 p-4 bg-background-light/50 rounded-sm border border-gold/10">
+            <Panel padding="md" className="flex items-center gap-4 mb-8">
               <div className="flex items-center gap-2">
                 <span className="text-gold-muted text-sm">稀有度:</span>
                 <StarRating rating={banknote.rarity} size={18} />
@@ -159,30 +165,9 @@ export default function BanknoteDetail() {
                 <Heart size={16} className="fill-gold/30 text-gold" />
                 <span className="text-parchment">{formatNumber(banknote.favoriteCount)} 人收藏</span>
               </div>
-            </div>
+            </Panel>
 
-            <div className="grid grid-cols-2 gap-4 mb-8">
-              {infoItems.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <div
-                    key={item.label}
-                    className="p-4 bg-background-light/30 rounded-sm border border-gold/10 hover:border-gold/30 transition-all"
-                  >
-                    <div className="flex items-center gap-2 mb-2">
-                      <Icon size={16} className="text-gold" />
-                      <span className="text-sm text-gold-muted font-display tracking-wider">
-                        {item.label}
-                      </span>
-                    </div>
-                    <p className="font-display text-xl text-parchment">{item.value}</p>
-                    {item.subValue && (
-                      <p className="text-sm text-gold-muted">{item.subValue}</p>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+            <InfoGrid items={infoItems} columns={2} className="mb-8" />
 
             <div className="mb-8">
               <h3 className="font-display text-xl text-parchment mb-4 flex items-center gap-2">
@@ -191,12 +176,13 @@ export default function BanknoteDetail() {
               </h3>
               <div className="flex flex-wrap gap-2">
                 {banknote.securityFeatures.map((feature, index) => (
-                  <span
+                  <Badge
                     key={index}
-                    className="px-4 py-2 bg-gold/10 text-gold rounded-sm font-body text-sm border border-gold/20"
+                    variant="gold"
+                    size="md"
                   >
                     {feature}
-                  </span>
+                  </Badge>
                 ))}
               </div>
             </div>
@@ -216,23 +202,27 @@ export default function BanknoteDetail() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-20">
-          <div className="p-8 bg-background-light/30 rounded-sm border border-gold/10">
+          <Panel padding="lg">
             <h3 className="font-display text-2xl text-parchment mb-6">正面图案</h3>
             <p className="font-body text-lg text-gold-muted leading-relaxed">
               {banknote.obverseDesign}
             </p>
-          </div>
-          <div className="p-8 bg-background-light/30 rounded-sm border border-gold/10">
+          </Panel>
+          <Panel padding="lg">
             <h3 className="font-display text-2xl text-parchment mb-6">背面图案</h3>
             <p className="font-body text-lg text-gold-muted leading-relaxed">
               {banknote.reverseDesign}
             </p>
-          </div>
+          </Panel>
         </div>
 
         <div className="mb-20">
-          <div className="relative overflow-hidden rounded-sm border border-gold/20 bg-gradient-to-br from-parchment/5 via-background to-parchment/5 p-8 md:p-12">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full blur-[80px]" />
+          <Panel
+            variant="gradient"
+            padding="xl"
+            gradientColors="from-parchment/5 via-background to-parchment/5"
+          >
+            <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full blur-[80px] pointer-events-none" />
             
             <h2 className="font-display text-3xl md:text-4xl text-parchment mb-6 flex items-center gap-3">
               <span className="ornament text-3xl">❧</span>
@@ -245,7 +235,7 @@ export default function BanknoteDetail() {
                 {banknote.history}
               </p>
             </div>
-          </div>
+          </Panel>
         </div>
 
         <NotePanel
@@ -257,13 +247,10 @@ export default function BanknoteDetail() {
 
         {relatedBanknotes.length > 0 && (
           <div>
-            <div className="text-center mb-12">
-              <h2 className="section-title">相关纸币</h2>
-              <div className="gold-divider mb-4" />
-              <p className="section-subtitle">
-                来自同一国家或同一年份的其他精美纸币
-              </p>
-            </div>
+            <SectionTitle
+              title="相关纸币"
+              subtitle="来自同一国家或同一年份的其他精美纸币"
+            />
             <BanknoteGrid banknotes={relatedBanknotes} showAction={false} />
           </div>
         )}
@@ -319,17 +306,12 @@ function RelatedTagsSection({ banknote }: { banknote: Banknote }) {
 
   return (
     <div className="mb-20">
-      <div className="text-center mb-8">
-        <div className="flex items-center justify-center gap-2 mb-2">
-          <Tags size={20} className="text-gold" />
-          <span className="text-gold font-display tracking-widest text-sm">RELATED TAGS</span>
-        </div>
-        <h2 className="section-title">相关标签</h2>
-        <div className="gold-divider mb-4" />
-        <p className="section-subtitle">
-          与本纸币标签关联的其他热门标签
-        </p>
-      </div>
+      <SectionTitle
+        title="相关标签"
+        subtitle="与本纸币标签关联的其他热门标签"
+        eyebrow="RELATED TAGS"
+        eyebrowIcon={<Tags size={20} className="text-gold" />}
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {allRelatedTags.map(tag => {

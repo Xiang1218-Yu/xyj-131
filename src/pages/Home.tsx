@@ -8,6 +8,7 @@ import { countries } from '@/data/countries';
 import { getYears } from '@/data/banknotes';
 import { securityFeatures } from '@/data/securityFeatures';
 import { formatNumber } from '@/utils/cn';
+import { Button, Panel, SectionTitle, StatCard } from '@/components/ui';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -142,12 +143,12 @@ export default function Home() {
               </div>
 
               <div className="flex flex-wrap items-center justify-center gap-4 mb-16">
-                <Link to="/banknotes" className="btn-gold-solid text-lg px-8 py-4">
-                  开始探索
-                </Link>
-                <Link to="/countries" className="btn-gold text-lg px-8 py-4">
-                  按国家浏览
-                </Link>
+                <Button variant="solid" size="lg" asChild>
+                  <Link to="/banknotes">开始探索</Link>
+                </Button>
+                <Button variant="default" size="lg" asChild>
+                  <Link to="/countries">按国家浏览</Link>
+                </Button>
               </div>
             </div>
 
@@ -203,17 +204,12 @@ export default function Home() {
 
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <Sparkles className="text-gold w-6 h-6" />
-              <span className="text-gold font-display tracking-widest text-sm">NEW ARRIVALS</span>
-            </div>
-            <h2 className="section-title">最新收录</h2>
-            <div className="gold-divider mb-4" />
-            <p className="section-subtitle">
-              最近新加入收藏馆的珍稀纸币
-            </p>
-          </div>
+          <SectionTitle
+            title="最新收录"
+            subtitle="最近新加入收藏馆的珍稀纸币"
+            eyebrow="NEW ARRIVALS"
+            eyebrowIcon={<Sparkles className="text-gold w-6 h-6" />}
+          />
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {latestBanknotes.map((banknote) => (
@@ -252,24 +248,13 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              {[
-                { value: totalBanknotes, label: '收录纸币' },
-                { value: totalCountries, label: '国家地区' },
-                { value: totalYears, label: '发行年份' },
-                { value: formatNumber(banknotes.reduce((sum, b) => sum + b.favoriteCount, 0)), label: '收藏总数' },
-              ].map((stat) => (
-                <div
-                  key={stat.label}
-                  className="text-center p-6 border border-gold/10 rounded-sm bg-background-light/30"
-                >
-                  <div className="font-display text-4xl md:text-5xl gold-gradient-text mb-2">
-                    {stat.value}
-                  </div>
-                  <div className="text-gold-muted font-display tracking-wider text-sm">
-                    {stat.label}
-                  </div>
-                </div>
-              ))}
+              <StatCard value={totalBanknotes} label="收录纸币" />
+              <StatCard value={totalCountries} label="国家地区" />
+              <StatCard value={totalYears} label="发行年份" />
+              <StatCard
+                value={formatNumber(banknotes.reduce((sum, b) => sum + b.favoriteCount, 0))}
+                label="收藏总数"
+              />
             </div>
           </div>
         </div>
@@ -277,9 +262,13 @@ export default function Home() {
 
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <div className="relative overflow-hidden rounded-sm border border-gold/20 bg-gradient-to-br from-gold/5 via-background to-copper/5 p-12 md:p-16">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 rounded-full blur-[80px]" />
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-copper/10 rounded-full blur-[80px]" />
+          <Panel
+            variant="gradient"
+            padding="xl"
+            gradientColors="from-gold/5 via-background to-copper/5"
+          >
+            <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 rounded-full blur-[80px] pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-copper/10 rounded-full blur-[80px] pointer-events-none" />
             
             <div className="relative z-10 max-w-2xl">
               <div className="flex items-center gap-3 mb-6">
@@ -296,15 +285,15 @@ export default function Home() {
                 创建属于您自己的数字收藏夹。
               </p>
               <div className="flex flex-wrap gap-4">
-                <Link to="/banknotes" className="btn-gold-solid text-lg px-8 py-4">
-                  浏览纸币
-                </Link>
-                <Link to="/favorites" className="btn-gold text-lg px-8 py-4">
-                  我的收藏
-                </Link>
+                <Button variant="solid" size="lg" asChild>
+                  <Link to="/banknotes">浏览纸币</Link>
+                </Button>
+                <Button variant="default" size="lg" asChild>
+                  <Link to="/favorites">我的收藏</Link>
+                </Button>
               </div>
             </div>
-          </div>
+          </Panel>
         </div>
       </section>
     </div>

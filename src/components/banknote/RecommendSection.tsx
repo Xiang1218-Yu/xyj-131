@@ -9,6 +9,7 @@ import BanknoteCard from './BanknoteCard';
 import EmptyState from '@/components/common/EmptyState';
 import { countries } from '@/data/countries';
 import { cn } from '@/utils/cn';
+import { SectionTitle, Select, IconButton, Button } from '@/components/ui';
 
 interface RecommendSectionProps {
   title?: string;
@@ -102,17 +103,12 @@ export default function RecommendSection({
   return (
     <section className={cn('py-20 bg-background-light/30', className)}>
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <span className="text-2xl">{dimInfo.icon}</span>
-            <span className="text-gold font-display tracking-widest text-sm">
-              RECOMMENDED FOR YOU
-            </span>
-          </div>
-          <h2 className="section-title">{displayTitle}</h2>
-          <div className="gold-divider mb-4" />
-          <p className="section-subtitle">{displaySubtitle}</p>
-        </div>
+        <SectionTitle
+          title={displayTitle}
+          subtitle={displaySubtitle}
+          eyebrow="RECOMMENDED FOR YOU"
+          eyebrowIcon={<span className="text-2xl">{dimInfo.icon}</span>}
+        />
 
         <div className="flex flex-wrap items-center justify-center gap-2 mb-8">
           {dimensions.map((dim) => {
@@ -146,6 +142,15 @@ export default function RecommendSection({
                     value={filters.country || ''}
                     onChange={(e) => setFilters({ country: e.target.value || undefined })}
                     className="bg-background border border-gold/20 rounded-sm px-3 py-2 text-sm text-parchment focus:outline-none focus:border-gold/50 transition-all cursor-pointer"
+                    style={{
+                      backgroundImage:
+                        "url(\"data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c9a962' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e\")",
+                      backgroundSize: '14px',
+                      backgroundPosition: 'right 10px center',
+                      backgroundRepeat: 'no-repeat',
+                      appearance: 'none',
+                      paddingRight: '36px',
+                    }}
                   >
                     <option value="">全部国家</option>
                     {countries.map((c) => (
@@ -164,6 +169,15 @@ export default function RecommendSection({
                     })
                   }
                   className="bg-background border border-gold/20 rounded-sm px-3 py-2 text-sm text-parchment focus:outline-none focus:border-gold/50 transition-all cursor-pointer"
+                  style={{
+                    backgroundImage:
+                      "url(\"data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c9a962' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e\")",
+                    backgroundSize: '14px',
+                    backgroundPosition: 'right 10px center',
+                    backgroundRepeat: 'no-repeat',
+                    appearance: 'none',
+                    paddingRight: '36px',
+                  }}
                 >
                   {availableDesignElements.map((d) => (
                     <option key={d} value={d}>
@@ -180,6 +194,15 @@ export default function RecommendSection({
                     })
                   }
                   className="bg-background border border-gold/20 rounded-sm px-3 py-2 text-sm text-parchment focus:outline-none focus:border-gold/50 transition-all cursor-pointer"
+                  style={{
+                    backgroundImage:
+                      "url(\"data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c9a962' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e\")",
+                    backgroundSize: '14px',
+                    backgroundPosition: 'right 10px center',
+                    backgroundRepeat: 'no-repeat',
+                    appearance: 'none',
+                    paddingRight: '36px',
+                  }}
                 >
                   {availableMaterials.map((m) => (
                     <option key={m} value={m}>
@@ -197,6 +220,15 @@ export default function RecommendSection({
                       })
                     }
                     className="bg-background border border-gold/20 rounded-sm px-3 py-2 text-sm text-parchment focus:outline-none focus:border-gold/50 transition-all cursor-pointer"
+                    style={{
+                      backgroundImage:
+                        "url(\"data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c9a962' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e\")",
+                      backgroundSize: '14px',
+                      backgroundPosition: 'right 10px center',
+                      backgroundRepeat: 'no-repeat',
+                      appearance: 'none',
+                      paddingRight: '36px',
+                    }}
                   >
                     <option value="">起始年份</option>
                     {availableYears.map((y) => (
@@ -214,6 +246,15 @@ export default function RecommendSection({
                       })
                     }
                     className="bg-background border border-gold/20 rounded-sm px-3 py-2 text-sm text-parchment focus:outline-none focus:border-gold/50 transition-all cursor-pointer"
+                    style={{
+                      backgroundImage:
+                        "url(\"data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c9a962' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e\")",
+                      backgroundSize: '14px',
+                      backgroundPosition: 'right 10px center',
+                      backgroundRepeat: 'no-repeat',
+                      appearance: 'none',
+                      paddingRight: '36px',
+                    }}
                   >
                     <option value="">结束年份</option>
                     {availableYears.map((y) => (
@@ -225,13 +266,14 @@ export default function RecommendSection({
                 </div>
 
                 {hasActiveFilters && (
-                  <button
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    leftIcon={X}
                     onClick={resetFilters}
-                    className="inline-flex items-center gap-1.5 px-3 py-2 text-sm text-gold-muted hover:text-gold transition-colors"
                   >
-                    <X size={14} />
                     重置
-                  </button>
+                  </Button>
                 )}
               </div>
             )}
@@ -240,51 +282,49 @@ export default function RecommendSection({
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
               <ArrowUpDown size={16} className="text-gold-muted" />
-              <select
+              <Select
+                variant="compact"
+                size="sm"
                 value={filters.sortBy || 'score'}
                 onChange={(e) =>
                   setFilters({
                     sortBy: e.target.value as RecommendFilterOptions['sortBy'],
                   })
                 }
-                className="bg-background border border-gold/20 rounded-sm px-3 py-2 text-sm text-parchment focus:outline-none focus:border-gold/50 transition-all cursor-pointer"
+                wrapperClassName="w-auto"
               >
                 {sortOptions.map((o) => (
                   <option key={o.value} value={o.value}>
                     按{o.label}
                   </option>
                 ))}
-              </select>
-              <button
+              </Select>
+              <IconButton
+                icon={ArrowUpDown}
+                size="sm"
                 onClick={() =>
                   setFilters({
                     sortOrder: filters.sortOrder === 'asc' ? 'desc' : 'asc',
                   })
                 }
-                className="w-9 h-9 bg-background border border-gold/20 rounded-sm flex items-center justify-center text-gold-muted hover:text-gold hover:border-gold/50 transition-all"
-              >
-                <ArrowUpDown
-                  size={16}
-                  className={cn(
-                    'transition-transform duration-300',
-                    filters.sortOrder === 'desc' && 'rotate-180'
-                  )}
-                />
-              </button>
+                className={cn(
+                  filters.sortOrder === 'desc' && '[&>svg]:rotate-180 [&>svg]:transition-transform [&>svg]:duration-300'
+                )}
+                label={filters.sortOrder === 'asc' ? '升序' : '降序'}
+              />
             </div>
 
             {showRefresh && (
-              <button
+              <Button
+                variant="soft"
+                size="default"
+                leftIcon={RefreshCw}
                 onClick={refreshBatch}
                 disabled={isLoading}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-gold/10 border border-gold/30 rounded-sm text-gold hover:bg-gold/20 hover:border-gold/50 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                className={cn(isLoading && '[&>svg]:animate-spin')}
               >
-                <RefreshCw
-                  size={16}
-                  className={cn('transition-transform', isLoading && 'animate-spin')}
-                />
-                <span className="font-display text-sm tracking-wider">换一批</span>
-              </button>
+                换一批
+              </Button>
             )}
           </div>
         </div>
@@ -294,9 +334,9 @@ export default function RecommendSection({
             title="暂无推荐"
             description="尝试调整筛选条件或换一批试试"
             action={
-              <button onClick={resetFilters} className="btn-gold">
+              <Button variant="default" onClick={resetFilters}>
                 重置筛选
-              </button>
+              </Button>
             }
           />
         ) : (
@@ -314,10 +354,13 @@ export default function RecommendSection({
         )}
 
         <div className="text-center mt-12">
-          <Link to="/banknotes" className="btn-gold inline-flex items-center gap-2">
-            查看全部纸币
-            <ArrowRight size={18} />
-          </Link>
+          <Button
+            variant="default"
+            rightIcon={ArrowRight}
+            asChild
+          >
+            <Link to="/banknotes">查看全部纸币</Link>
+          </Button>
         </div>
       </div>
     </section>

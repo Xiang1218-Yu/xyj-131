@@ -6,6 +6,7 @@ import { useFavoriteStore } from '@/store/useFavoriteStore';
 import { useFilterStore } from '@/store/useFilterStore';
 import StarRating from '@/components/common/StarRating';
 import TagWithTooltip from '@/components/common/TagWithTooltip';
+import { IconButton } from '@/components/ui';
 import { cn, formatNumber, getRarityLabel, getRarityColor } from '@/utils/cn';
 
 interface BanknoteCardProps {
@@ -108,21 +109,15 @@ export default function BanknoteCard({
               />
             ))}
           </div>
-          <button
+          <IconButton
+            icon={Heart}
+            size="sm"
+            variant={favorite ? 'soft' : 'default'}
+            active={favorite}
             onClick={handleFavoriteClick}
-            className={cn(
-              'w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200',
-              'border border-gold/20',
-              favorite
-                ? 'bg-gold/20 text-gold border-gold/40'
-                : 'bg-background text-gold-muted hover:text-gold hover:border-gold/40'
-            )}
-          >
-            <Heart
-              size={14}
-              className={cn('transition-all', favorite && 'fill-current')}
-            />
-          </button>
+            className={cn(favorite && '[&>svg]:fill-current')}
+            label={favorite ? '取消收藏' : '收藏'}
+          />
         </div>
       </Link>
     );
@@ -186,21 +181,14 @@ export default function BanknoteCard({
                 {getRarityLabel(banknote.rarity)}
               </p>
             </div>
-            <button
+            <IconButton
+              icon={Heart}
+              variant={favorite ? 'soft' : 'default'}
+              active={favorite}
               onClick={handleFavoriteClick}
-              className={cn(
-                'w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 z-10',
-                'bg-background/60 backdrop-blur-sm border border-gold/30',
-                favorite
-                  ? 'text-gold bg-gold/20 border-gold/50'
-                  : 'text-parchment/70 hover:text-gold hover:border-gold'
-              )}
-            >
-              <Heart
-                size={18}
-                className={cn('transition-all duration-300', favorite && 'fill-current')}
-              />
-            </button>
+              className={cn(favorite && '[&>svg]:fill-current')}
+              label={favorite ? '取消收藏' : '收藏'}
+            />
           </div>
 
           <div className="flex flex-wrap gap-3 mb-4">
@@ -289,22 +277,21 @@ export default function BanknoteCard({
           )}
         />
 
-        <button
+        <IconButton
+          icon={Heart}
+          variant={favorite ? 'solid' : 'default'}
+          active={favorite}
           onClick={handleFavoriteClick}
           className={cn(
-            'absolute top-3 right-3 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 z-10',
-            'bg-background/60 backdrop-blur-sm border border-gold/30',
+            'absolute top-3 right-3 z-10 transition-all duration-300',
             favorite
-              ? 'text-gold hover:bg-gold hover:text-background'
-              : 'text-parchment/70 hover:text-gold hover:border-gold',
-            isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'
+              ? 'hover:bg-gold hover:text-background'
+              : 'text-parchment/70 hover:text-gold',
+            isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2',
+            favorite && '[&>svg]:fill-current'
           )}
-        >
-          <Heart
-            size={18}
-            className={cn('transition-all duration-300', favorite && 'fill-current')}
-          />
-        </button>
+          label={favorite ? '取消收藏' : '收藏'}
+        />
 
         <div className="absolute bottom-3 left-3 right-3 z-10">
           <div className="flex items-center justify-between">

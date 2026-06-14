@@ -5,6 +5,7 @@ import { useBanknoteStore } from '@/store/useBanknoteStore';
 import { countries } from '@/data/countries';
 import type { ViewMode } from '@/types';
 import { cn } from '@/utils/cn';
+import { Panel, Select, Input, IconButton, Button } from '@/components/ui';
 
 interface FilterBarProps {
   showSearch?: boolean;
@@ -115,114 +116,95 @@ export default function FilterBar({ showSearch = true, showViewMode = true, clas
   ];
 
   return (
-    <div className={cn('bg-background-light/50 backdrop-blur-sm border border-gold/10 rounded-sm p-6', className)}>
+    <Panel padding="lg" className={cn('bg-background-light/50 backdrop-blur-sm', className)}>
       {showSearch && (
-        <div className="relative mb-6">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gold-muted" />
-          <input
+        <div className="mb-6">
+          <Input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="搜索国家、面值、年份、图案、设计元素..."
-            className="w-full bg-background border border-gold/20 rounded-sm pl-12 pr-4 py-3 text-parchment placeholder:text-gold-muted/50 focus:outline-none focus:border-gold/50 transition-all"
+            leftIcon={<Search className="w-5 h-5" />}
           />
         </div>
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4 mb-6">
-        <div>
-          <label className="block text-sm text-gold-muted mb-2 font-display tracking-wider">国家</label>
-          <select
-            value={country}
-            onChange={(e) => setCountry(e.target.value)}
-            className="w-full bg-background border border-gold/20 rounded-sm px-4 py-2.5 text-parchment focus:outline-none focus:border-gold/50 transition-all cursor-pointer"
-          >
-            <option value="">全部国家</option>
-            {countries.map((c) => (
-              <option key={c.code} value={c.code}>
-                {c.flag} {c.name}
-              </option>
-            ))}
-          </select>
-        </div>
+        <Select
+          label="国家"
+          value={country}
+          onChange={(e) => setCountry(e.target.value)}
+        >
+          <option value="">全部国家</option>
+          {countries.map((c) => (
+            <option key={c.code} value={c.code}>
+              {c.flag} {c.name}
+            </option>
+          ))}
+        </Select>
 
-        <div>
-          <label className="block text-sm text-gold-muted mb-2 font-display tracking-wider">起始年份</label>
-          <select
-            value={yearFrom || ''}
-            onChange={(e) => setYearFrom(e.target.value ? Number(e.target.value) : null)}
-            className="w-full bg-background border border-gold/20 rounded-sm px-4 py-2.5 text-parchment focus:outline-none focus:border-gold/50 transition-all cursor-pointer"
-          >
-            <option value="">不限</option>
-            {availableYears.map((y) => (
-              <option key={`from-${y}`} value={y}>
-                {y}年
-              </option>
-            ))}
-          </select>
-        </div>
+        <Select
+          label="起始年份"
+          value={yearFrom || ''}
+          onChange={(e) => setYearFrom(e.target.value ? Number(e.target.value) : null)}
+        >
+          <option value="">不限</option>
+          {availableYears.map((y) => (
+            <option key={`from-${y}`} value={y}>
+              {y}年
+            </option>
+          ))}
+        </Select>
 
-        <div>
-          <label className="block text-sm text-gold-muted mb-2 font-display tracking-wider">结束年份</label>
-          <select
-            value={yearTo || ''}
-            onChange={(e) => setYearTo(e.target.value ? Number(e.target.value) : null)}
-            className="w-full bg-background border border-gold/20 rounded-sm px-4 py-2.5 text-parchment focus:outline-none focus:border-gold/50 transition-all cursor-pointer"
-          >
-            <option value="">不限</option>
-            {availableYears.map((y) => (
-              <option key={`to-${y}`} value={y}>
-                {y}年
-              </option>
-            ))}
-          </select>
-        </div>
+        <Select
+          label="结束年份"
+          value={yearTo || ''}
+          onChange={(e) => setYearTo(e.target.value ? Number(e.target.value) : null)}
+        >
+          <option value="">不限</option>
+          {availableYears.map((y) => (
+            <option key={`to-${y}`} value={y}>
+              {y}年
+            </option>
+          ))}
+        </Select>
 
-        <div>
-          <label className="block text-sm text-gold-muted mb-2 font-display tracking-wider">面值</label>
-          <select
-            value={denomination}
-            onChange={(e) => setDenomination(e.target.value)}
-            className="w-full bg-background border border-gold/20 rounded-sm px-4 py-2.5 text-parchment focus:outline-none focus:border-gold/50 transition-all cursor-pointer"
-          >
-            <option value="">全部面值</option>
-            {availableDenominations.map((d) => (
-              <option key={d} value={d}>
-                {d}
-              </option>
-            ))}
-          </select>
-        </div>
+        <Select
+          label="面值"
+          value={denomination}
+          onChange={(e) => setDenomination(e.target.value)}
+        >
+          <option value="">全部面值</option>
+          {availableDenominations.map((d) => (
+            <option key={d} value={d}>
+              {d}
+            </option>
+          ))}
+        </Select>
 
-        <div>
-          <label className="block text-sm text-gold-muted mb-2 font-display tracking-wider">材质</label>
-          <select
-            value={material}
-            onChange={(e) => setMaterial(e.target.value)}
-            className="w-full bg-background border border-gold/20 rounded-sm px-4 py-2.5 text-parchment focus:outline-none focus:border-gold/50 transition-all cursor-pointer"
-          >
-            {availableMaterials.map((m) => (
-              <option key={m} value={m}>
-                {m}
-              </option>
-            ))}
-          </select>
-        </div>
+        <Select
+          label="材质"
+          value={material}
+          onChange={(e) => setMaterial(e.target.value)}
+        >
+          {availableMaterials.map((m) => (
+            <option key={m} value={m}>
+              {m}
+            </option>
+          ))}
+        </Select>
 
-        <div>
-          <label className="block text-sm text-gold-muted mb-2 font-display tracking-wider">设计元素</label>
-          <select
-            value={designElement}
-            onChange={(e) => setDesignElement(e.target.value)}
-            className="w-full bg-background border border-gold/20 rounded-sm px-4 py-2.5 text-parchment focus:outline-none focus:border-gold/50 transition-all cursor-pointer"
-          >
-            {availableDesignElements.map((d) => (
-              <option key={d} value={d}>
-                {d}
-              </option>
-            ))}
-          </select>
-        </div>
+        <Select
+          label="设计元素"
+          value={designElement}
+          onChange={(e) => setDesignElement(e.target.value)}
+        >
+          {availableDesignElements.map((d) => (
+            <option key={d} value={d}>
+              {d === '全部' ? '全部设计' : d}
+            </option>
+          ))}
+        </Select>
 
         <div>
           <label className="block text-sm text-gold-muted mb-2 font-display tracking-wider">排序</label>
@@ -231,6 +213,15 @@ export default function FilterBar({ showSearch = true, showViewMode = true, clas
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as 'year' | 'country' | 'favorite')}
               className="flex-1 bg-background border border-gold/20 rounded-sm px-3 py-2.5 text-parchment focus:outline-none focus:border-gold/50 transition-all cursor-pointer text-sm"
+              style={{
+                backgroundImage:
+                  "url(\"data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c9a962' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e\")",
+                backgroundSize: '14px',
+                backgroundPosition: 'right 10px center',
+                backgroundRepeat: 'no-repeat',
+                appearance: 'none',
+                paddingRight: '36px',
+              }}
             >
               {sortOptions.map((o) => (
                 <option key={o.value} value={o.value}>
@@ -238,15 +229,15 @@ export default function FilterBar({ showSearch = true, showViewMode = true, clas
                 </option>
               ))}
             </select>
-            <button
+            <IconButton
+              icon={ArrowUpDown}
               onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-              className="w-10 bg-background border border-gold/20 rounded-sm flex items-center justify-center text-gold hover:border-gold/50 transition-all"
-            >
-              <ArrowUpDown
-                size={18}
-                className={cn('transition-transform duration-300', sortOrder === 'desc' && 'rotate-180')}
-              />
-            </button>
+              className={cn(
+                'shrink-0',
+                sortOrder === 'desc' && '[&>svg]:rotate-180 [&>svg]:transition-transform [&>svg]:duration-300'
+              )}
+              label={sortOrder === 'asc' ? '升序' : '降序'}
+            />
           </div>
         </div>
       </div>
@@ -254,13 +245,14 @@ export default function FilterBar({ showSearch = true, showViewMode = true, clas
       <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-gold/10">
         <div className="flex flex-wrap items-center gap-2">
           {tag && (
-            <button
+            <Button
+              variant="soft"
+              size="sm"
+              rightIcon={X}
               onClick={() => setTag('')}
-              className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 bg-gold/20 text-gold rounded-sm hover:bg-gold/30 transition-colors"
             >
-              <span>标签: {tag}</span>
-              <X size={12} />
-            </button>
+              标签: {tag}
+            </Button>
           )}
           {hasActiveFilters && !tag && (
             <div className="flex items-center gap-2">
@@ -269,13 +261,14 @@ export default function FilterBar({ showSearch = true, showViewMode = true, clas
             </div>
           )}
           {hasActiveFilters && (
-            <button
+            <Button
+              variant="ghost"
+              size="sm"
+              leftIcon={X}
               onClick={resetFilters}
-              className="flex items-center gap-2 text-sm text-gold hover:text-gold-light transition-colors"
             >
-              <X size={16} />
               重置筛选
-            </button>
+            </Button>
           )}
         </div>
 
@@ -304,6 +297,6 @@ export default function FilterBar({ showSearch = true, showViewMode = true, clas
           </div>
         )}
       </div>
-    </div>
+    </Panel>
   );
 }
