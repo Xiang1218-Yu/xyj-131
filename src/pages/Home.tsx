@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Globe, Calendar, DollarSign, TrendingUp, Sparkles, ArrowRight, Coins, Shield, Gift, Palette } from 'lucide-react';
+import { Globe, Calendar, DollarSign, Sparkles, ArrowRight, Coins, Shield, Gift, Palette } from 'lucide-react';
 import { useBanknoteStore } from '@/store/useBanknoteStore';
-import BanknoteGrid from '@/components/banknote/BanknoteGrid';
+import RecommendSection from '@/components/banknote/RecommendSection';
 import SearchBar from '@/components/common/SearchBar';
 import { countries } from '@/data/countries';
 import { getYears } from '@/data/banknotes';
@@ -11,7 +11,7 @@ import { formatNumber } from '@/utils/cn';
 
 export default function Home() {
   const navigate = useNavigate();
-  const { getPopularBanknotes, getLatestBanknotes, banknotes } = useBanknoteStore();
+  const { getLatestBanknotes, banknotes } = useBanknoteStore();
   const [searchValue, setSearchValue] = useState('');
   const [loaded, setLoaded] = useState(false);
 
@@ -20,7 +20,6 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, []);
 
-  const popularBanknotes = getPopularBanknotes(8);
   const latestBanknotes = getLatestBanknotes(4);
   const years = getYears();
   const totalBanknotes = banknotes.length;
@@ -195,30 +194,12 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-20 bg-background-light/30">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <TrendingUp className="text-gold w-6 h-6" />
-              <span className="text-gold font-display tracking-widest text-sm">MOST FAVORITED</span>
-            </div>
-            <h2 className="section-title">最受欢迎的纸币</h2>
-            <div className="gold-divider mb-4" />
-            <p className="section-subtitle">
-              被收藏次数最多的精美纸币，感受藏家们的共同选择
-            </p>
-          </div>
-
-          <BanknoteGrid banknotes={popularBanknotes} showAction={false} />
-
-          <div className="text-center mt-12">
-            <Link to="/banknotes" className="btn-gold inline-flex items-center gap-2">
-              查看全部纸币
-              <ArrowRight size={18} />
-            </Link>
-          </div>
-        </div>
-      </section>
+      <RecommendSection
+        title="智能推荐"
+        subtitle="多种推荐维度，发现更多精美纸币"
+        limit={8}
+        initialDimension="popular"
+      />
 
       <section className="py-20">
         <div className="container mx-auto px-4">

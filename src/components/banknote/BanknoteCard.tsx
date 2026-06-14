@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, MapPin, Calendar, DollarSign } from 'lucide-react';
-import type { Banknote, ViewMode } from '@/types';
+import type { Banknote, ViewMode, RecommendationReason } from '@/types';
 import { useFavoriteStore } from '@/store/useFavoriteStore';
 import { useFilterStore } from '@/store/useFilterStore';
 import StarRating from '@/components/common/StarRating';
@@ -12,9 +12,17 @@ interface BanknoteCardProps {
   banknote: Banknote;
   index?: number;
   viewMode?: ViewMode;
+  recommendationReason?: RecommendationReason;
+  showRecommendationBadge?: boolean;
 }
 
-export default function BanknoteCard({ banknote, index = 0, viewMode = 'grid' }: BanknoteCardProps) {
+export default function BanknoteCard({
+  banknote,
+  index = 0,
+  viewMode = 'grid',
+  recommendationReason,
+  showRecommendationBadge = true,
+}: BanknoteCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const { isFavorite, addFavorite, removeFavorite } = useFavoriteStore();
@@ -344,6 +352,24 @@ export default function BanknoteCard({ banknote, index = 0, viewMode = 'grid' }:
             <span>{banknote.mainColor}</span>
           </div>
         </div>
+
+        {recommendationReason && showRecommendationBadge && (
+          <div className="mb-4 p-3 bg-gold/5 border border-gold/20 rounded-sm">
+            <div className="flex items-start gap-2">
+              <span className="text-lg leading-none">{recommendationReason.icon}</span>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs font-display tracking-wider text-gold">
+                    {recommendationReason.label}
+                  </span>
+                </div>
+                <p className="text-xs text-gold-muted line-clamp-2">
+                  {recommendationReason.detail}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="flex items-center justify-between pt-3 border-t border-gold/10">
           <div className="flex flex-wrap gap-1.5">

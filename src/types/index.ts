@@ -140,3 +140,37 @@ export interface CurrencyConversionResult {
   historicalComparison: string;
   funFacts: string[];
 }
+
+export type RecommendDimension =
+  | 'popular'
+  | 'latest'
+  | 'rare'
+  | 'sameCountry'
+  | 'similarDesign'
+  | 'sameTag'
+  | 'sameMaterial'
+  | 'sameEra'
+  | 'random';
+
+export interface RecommendationReason {
+  type: string;
+  label: string;
+  icon: string;
+  detail: string;
+}
+
+export interface RecommendedBanknote extends Banknote {
+  recommendationReason: RecommendationReason;
+  score: number;
+}
+
+export interface RecommendFilterOptions {
+  country?: string;
+  designElement?: string;
+  tag?: string;
+  material?: string;
+  yearFrom?: number | null;
+  yearTo?: number | null;
+  sortBy?: 'score' | 'favorite' | 'year' | 'rarity';
+  sortOrder?: 'asc' | 'desc';
+}
