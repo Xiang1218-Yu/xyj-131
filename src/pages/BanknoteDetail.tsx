@@ -205,13 +205,14 @@ export default function BanknoteDetail() {
                 标签
               </h3>
               <div className="flex flex-wrap gap-2">
-                {banknote.tags.map((tag, index) => (
-                  <span
+                {banknote.tags.map((t, index) => (
+                  <Link
                     key={index}
-                    className="px-3 py-1.5 bg-background-light text-gold-muted rounded-sm font-sans text-xs border border-gold/10 hover:border-gold/30 transition-all cursor-pointer"
+                    to={`/banknotes?tag=${encodeURIComponent(t)}`}
+                    className="px-3 py-1.5 bg-background-light text-gold-muted rounded-sm font-sans text-xs border border-gold/10 hover:border-gold/50 hover:bg-gold/10 hover:text-gold transition-all"
                   >
-                    #{tag}
-                  </span>
+                    #{t}
+                  </Link>
                 ))}
               </div>
             </div>

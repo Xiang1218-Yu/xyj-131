@@ -22,6 +22,7 @@ interface BanknoteStore {
     denomination?: string;
     material?: string;
     designElement?: string;
+    tag?: string;
     sortBy?: 'year' | 'country' | 'favorite';
     sortOrder?: 'asc' | 'desc';
   }) => Banknote[];
@@ -78,7 +79,11 @@ export const useBanknoteStore = create<BanknoteStore>(() => ({
     }
     
     if (filters.designElement && filters.designElement !== '全部') {
-      result = result.filter((b) => b.designElements.includes(filters.designElement as any));
+      result = result.filter((b) => b.designElements.includes(filters.designElement as Banknote['designElements'][number]));
+    }
+    
+    if (filters.tag) {
+      result = result.filter((b) => b.tags.includes(filters.tag!));
     }
     
     if (filters.sortBy) {

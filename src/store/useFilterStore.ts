@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { FilterState } from '@/types';
+import type { FilterState, ViewMode } from '@/types';
 
 interface FilterStore extends FilterState {
   setSearch: (search: string) => void;
@@ -9,8 +9,10 @@ interface FilterStore extends FilterState {
   setDenomination: (denomination: string) => void;
   setMaterial: (material: string) => void;
   setDesignElement: (designElement: string) => void;
+  setTag: (tag: string) => void;
   setSortBy: (sortBy: FilterState['sortBy']) => void;
   setSortOrder: (sortOrder: FilterState['sortOrder']) => void;
+  setViewMode: (viewMode: ViewMode) => void;
   resetFilters: () => void;
 }
 
@@ -22,8 +24,10 @@ const initialState: FilterState = {
   denomination: '',
   material: '全部',
   designElement: '全部',
+  tag: '',
   sortBy: 'favorite',
   sortOrder: 'desc',
+  viewMode: 'grid',
 };
 
 export const useFilterStore = create<FilterStore>((set) => ({
@@ -35,7 +39,9 @@ export const useFilterStore = create<FilterStore>((set) => ({
   setDenomination: (denomination) => set({ denomination }),
   setMaterial: (material) => set({ material }),
   setDesignElement: (designElement) => set({ designElement }),
+  setTag: (tag) => set({ tag }),
   setSortBy: (sortBy) => set({ sortBy }),
   setSortOrder: (sortOrder) => set({ sortOrder }),
+  setViewMode: (viewMode) => set({ viewMode }),
   resetFilters: () => set(initialState),
 }));

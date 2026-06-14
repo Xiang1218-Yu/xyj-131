@@ -51,6 +51,8 @@ export interface Country {
   banknoteCount: number;
 }
 
+export type ViewMode = 'grid' | 'list' | 'compact';
+
 export interface FilterState {
   search: string;
   country: string;
@@ -59,8 +61,10 @@ export interface FilterState {
   denomination: string;
   material: string;
   designElement: string;
+  tag: string;
   sortBy: 'year' | 'country' | 'favorite';
   sortOrder: 'asc' | 'desc';
+  viewMode: ViewMode;
 }
 
 export interface FavoriteState {

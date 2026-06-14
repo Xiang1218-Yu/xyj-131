@@ -1,16 +1,18 @@
 import { useMemo, useEffect } from 'react';
-import { Search, Filter, X, ArrowUpDown } from 'lucide-react';
+import { Search, Filter, X, ArrowUpDown, LayoutGrid, List, LayoutList } from 'lucide-react';
 import { useFilterStore } from '@/store/useFilterStore';
 import { useBanknoteStore } from '@/store/useBanknoteStore';
 import { countries } from '@/data/countries';
+import type { ViewMode } from '@/types';
 import { cn } from '@/utils/cn';
 
 interface FilterBarProps {
   showSearch?: boolean;
+  showViewMode?: boolean;
   className?: string;
 }
 
-export default function FilterBar({ showSearch = true, className }: FilterBarProps) {
+export default function FilterBar({ showSearch = true, showViewMode = true, className }: FilterBarProps) {
   const {
     search,
     country,
@@ -19,8 +21,10 @@ export default function FilterBar({ showSearch = true, className }: FilterBarPro
     denomination,
     material,
     designElement,
+    tag,
     sortBy,
     sortOrder,
+    viewMode,
     setSearch,
     setCountry,
     setYearFrom,
@@ -28,8 +32,10 @@ export default function FilterBar({ showSearch = true, className }: FilterBarPro
     setDenomination,
     setMaterial,
     setDesignElement,
+    setTag,
     setSortBy,
     setSortOrder,
+    setViewMode,
     resetFilters,
   } = useFilterStore();
 
@@ -94,7 +100,13 @@ export default function FilterBar({ showSearch = true, className }: FilterBarPro
     }
   }, [country, designElement, availableDesignElements, setDesignElement]);
 
-  const hasActiveFilters = search || country || yearFrom || yearTo || denomination || (material && material !== '全部') || (designElement && designElement !== '全部');
+  const hasActiveFilters = search || country || yearFrom || yearTo || denomination || (material && material !== '全部') || (designElement && designElement !== '全部') || tag;
+
+  const viewModes: { value: ViewMode; label: string; icon: typeof LayoutGrid }[] = [
+    { value: 'grid', label: '网格', icon: LayoutGrid },
+    { value: 'list', label: '列表', icon: List },
+    { value: 'compact', label: '紧凑', icon: LayoutList },
+  ];
 
   const sortOptions = [
     { value: 'favorite', label: '收藏数' },
@@ -239,21 +251,59 @@ export default function FilterBar({ showSearch = true, className }: FilterBarPro
         </div>
       </div>
 
-      {hasActiveFilters && (
-        <div className="flex items-center justify-between pt-4 border-t border-gold/10">
-          <div className="flex items-center gap-2">
-            <Filter size={16} className="text-gold" />
-            <span className="text-sm text-gold-muted">已启用筛选条件</span>
-          </div>
-          <button
-            onClick={resetFilters}
-            className="flex items-center gap-2 text-sm text-gold hover:text-gold-light transition-colors"
-          >
-            <X size={16} />
-            重置筛选
-          </button>
+      <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-gold/10">
+        <div className="flex flex-wrap items-center gap-2">
+          {tag && (
+            <button
+              onClick={() => setTag('')}
+              className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 bg-gold/20 text-gold rounded-sm hover:bg-gold/30 transition-colors"
+            >
+              <span>标签: {tag}</span>
+              <X size={12} />
+            </button>
+          )}
+          {hasActiveFilters && !tag && (
+            <div className="flex items-center gap-2">
+              <Filter size={16} className="text-gold" />
+              <span className="text-sm text-gold-muted">已启用筛选条件</span>
+            </div>
+          )}
+          {hasActiveFilters && (
+            <button
+              onClick={resetFilters}
+              className="flex items-center gap-2 text-sm text-gold hover:text-gold-light transition-colors"
+            >
+              <X size={16} />
+              重置筛选
+            </button>
+          )}
         </div>
-      )}
+
+        {showViewMode && (
+          <div className="flex items-center gap-1 p-1 bg-background border border-gold/20 rounded-sm">
+            {viewModes.map((vm) => {
+              const Icon = vm.icon;
+              const isActive = viewMode === vm.value;
+              return (
+                <button
+                  key={vm.value}
+                  onClick={() => setViewMode(vm.value)}
+                  className={cn(
+                    'flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-xs font-display tracking-wider transition-all duration-200',
+                    isActive
+                      ? 'bg-gold text-background'
+                      : 'text-gold-muted hover:text-gold hover:bg-gold/10'
+                  )}
+                  title={vm.label}
+                >
+                  <Icon size={14} />
+                  <span className="hidden sm:inline">{vm.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

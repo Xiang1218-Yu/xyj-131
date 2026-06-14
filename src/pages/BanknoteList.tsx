@@ -5,6 +5,7 @@ import { useFilterStore } from '@/store/useFilterStore';
 import BanknoteGrid from '@/components/banknote/BanknoteGrid';
 import FilterBar from '@/components/banknote/FilterBar';
 import { Filter } from 'lucide-react';
+import type { ViewMode } from '@/types';
 
 export default function BanknoteList() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -18,8 +19,10 @@ export default function BanknoteList() {
     denomination,
     material,
     designElement,
+    tag,
     sortBy,
     sortOrder,
+    viewMode,
     setSearch,
     setCountry,
     setYearFrom,
@@ -27,6 +30,8 @@ export default function BanknoteList() {
     setDenomination,
     setMaterial,
     setDesignElement,
+    setTag,
+    setViewMode,
   } = filters;
   const initializedRef = useRef(false);
 
@@ -42,6 +47,8 @@ export default function BanknoteList() {
     const denominationParam = sp.get('denomination');
     const materialParam = sp.get('material');
     const designElementParam = sp.get('designElement');
+    const tagParam = sp.get('tag');
+    const viewModeParam = sp.get('viewMode') as ViewMode | null;
 
     if (searchQuery) setSearch(searchQuery);
     if (countryParam) setCountry(countryParam);
@@ -50,7 +57,9 @@ export default function BanknoteList() {
     if (denominationParam) setDenomination(denominationParam);
     if (materialParam) setMaterial(materialParam);
     if (designElementParam) setDesignElement(designElementParam);
-  }, [searchParams, setSearch, setCountry, setYearFrom, setYearTo, setDenomination, setMaterial, setDesignElement]);
+    if (tagParam) setTag(tagParam);
+    if (viewModeParam && ['grid', 'list', 'compact'].includes(viewModeParam)) setViewMode(viewModeParam);
+  }, [searchParams, setSearch, setCountry, setYearFrom, setYearTo, setDenomination, setMaterial, setDesignElement, setTag, setViewMode]);
 
   useEffect(() => {
     const params: Record<string, string> = {};
@@ -61,9 +70,11 @@ export default function BanknoteList() {
     if (denomination) params.denomination = denomination;
     if (material && material !== '全部') params.material = material;
     if (designElement && designElement !== '全部') params.designElement = designElement;
+    if (tag) params.tag = tag;
+    if (viewMode !== 'grid') params.viewMode = viewMode;
 
     setSearchParams(params, { replace: true });
-  }, [search, country, yearFrom, yearTo, denomination, material, designElement, setSearchParams]);
+  }, [search, country, yearFrom, yearTo, denomination, material, designElement, tag, viewMode, setSearchParams]);
 
   const filteredBanknotes = useMemo(() => {
     return filterBanknotes({
@@ -74,10 +85,11 @@ export default function BanknoteList() {
       denomination,
       material,
       designElement,
+      tag,
       sortBy,
       sortOrder,
     });
-  }, [filterBanknotes, search, country, yearFrom, yearTo, denomination, material, designElement, sortBy, sortOrder]);
+  }, [filterBanknotes, search, country, yearFrom, yearTo, denomination, material, designElement, tag, sortBy, sortOrder]);
 
   return (
     <div className="min-h-screen py-12">
@@ -106,6 +118,7 @@ export default function BanknoteList() {
           banknotes={filteredBanknotes}
           emptyMessage="没有找到符合条件的纸币，请尝试调整筛选条件"
           showAction={false}
+          viewMode={viewMode}
         />
       </div>
     </div>
