@@ -1,3 +1,5 @@
+export type DesignElementCategory = '人物' | '建筑' | '自然' | '动物' | '艺术' | '科技' | '历史' | '符号';
+
 export interface Banknote {
   id: string;
   country: string;
@@ -18,6 +20,27 @@ export interface Banknote {
   favoriteCount: number;
   tags: string[];
   createdAt: string;
+  designElements: DesignElementCategory[];
+}
+
+export interface SecurityFeature {
+  id: string;
+  name: string;
+  category: '基材防伪' | '印刷防伪' | '油墨防伪' | '光学防伪' | '数字防伪' | '触觉防伪';
+  description: string;
+  principle: string;
+  examples: string[];
+  difficulty: 1 | 2 | 3 | 4 | 5;
+  effectiveness: 1 | 2 | 3 | 4 | 5;
+  history: string;
+  iconName: string;
+}
+
+export interface DesignElementInfo {
+  category: DesignElementCategory;
+  description: string;
+  iconName: string;
+  color: string;
 }
 
 export interface Country {

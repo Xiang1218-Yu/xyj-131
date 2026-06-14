@@ -16,6 +16,9 @@ import QuizCategorySelect from "@/pages/QuizCategorySelect";
 import QuizPlay from "@/pages/QuizPlay";
 import QuizResult from "@/pages/QuizResult";
 import Timeline from "@/pages/Timeline";
+import SecurityFeatures from "@/pages/SecurityFeatures";
+import LuckyDraw from "@/pages/LuckyDraw";
+import DesignElements from "@/pages/DesignElements";
 
 export default function App() {
   return (
@@ -28,11 +31,14 @@ export default function App() {
           <Route path="/countries" element={<CountryBrowse />} />
           <Route path="/years" element={<YearBrowse />} />
           <Route path="/denominations" element={<DenominationBrowse />} />
+          <Route path="/design-elements" element={<DesignElements />} />
+          <Route path="/timeline" element={<Timeline />} />
+          <Route path="/security-features" element={<SecurityFeatures />} />
+          <Route path="/lucky-draw" element={<LuckyDraw />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/quiz" element={<QuizCategorySelect />} />
           <Route path="/quiz/play" element={<QuizPlay />} />
           <Route path="/quiz/result" element={<QuizResult />} />
-          <Route path="/timeline" element={<Timeline />} />
           <Route path="/about" element={<About />} />
           <Route path="/data-sources" element={<DataSources />} />
           <Route path="/privacy" element={<Privacy />} />

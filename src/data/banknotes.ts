@@ -24,6 +24,7 @@ export const banknotes: Banknote[] = [
     favoriteCount: 2847,
     tags: ['人民币', '第五套', '流通钞'],
     createdAt: '2024-01-15',
+    designElements: ['人物', '建筑', '符号'],
   },
   {
     id: 'cn-50-2019',
@@ -45,6 +46,7 @@ export const banknotes: Banknote[] = [
     favoriteCount: 1923,
     tags: ['人民币', '第五套', '流通钞'],
     createdAt: '2024-02-10',
+    designElements: ['人物', '建筑', '自然'],
   },
   {
     id: 'cn-10-1999',
@@ -66,6 +68,7 @@ export const banknotes: Banknote[] = [
     favoriteCount: 3156,
     tags: ['人民币', '第五套', '99版', '收藏热门'],
     createdAt: '2024-01-20',
+    designElements: ['人物', '自然', '符号'],
   },
   {
     id: 'us-100-2009',
@@ -87,6 +90,7 @@ export const banknotes: Banknote[] = [
     favoriteCount: 4521,
     tags: ['美元', '流通钞', '世界货币'],
     createdAt: '2024-01-05',
+    designElements: ['人物', '建筑', '历史', '符号'],
   },
   {
     id: 'us-20-2017',
@@ -108,6 +112,7 @@ export const banknotes: Banknote[] = [
     favoriteCount: 2341,
     tags: ['美元', '流通钞'],
     createdAt: '2024-02-15',
+    designElements: ['人物', '建筑'],
   },
   {
     id: 'jp-10000-2004',
@@ -129,6 +134,7 @@ export const banknotes: Banknote[] = [
     favoriteCount: 3892,
     tags: ['日元', '流通钞', '日本文化'],
     createdAt: '2024-01-12',
+    designElements: ['人物', '艺术', '建筑'],
   },
   {
     id: 'jp-5000-2004',
@@ -150,6 +156,7 @@ export const banknotes: Banknote[] = [
     favoriteCount: 2784,
     tags: ['日元', '流通钞', '艺术'],
     createdAt: '2024-02-20',
+    designElements: ['人物', '艺术', '自然'],
   },
   {
     id: 'gb-50-2011',
@@ -171,6 +178,7 @@ export const banknotes: Banknote[] = [
     favoriteCount: 4123,
     tags: ['英镑', '流通钞', '女王'],
     createdAt: '2024-01-08',
+    designElements: ['人物', '科技', '历史'],
   },
   {
     id: 'gb-20-2007',
@@ -192,6 +200,7 @@ export const banknotes: Banknote[] = [
     favoriteCount: 2891,
     tags: ['英镑', '流通钞'],
     createdAt: '2024-02-25',
+    designElements: ['人物', '历史'],
   },
   {
     id: 'eu-100-2002',
@@ -213,6 +222,7 @@ export const banknotes: Banknote[] = [
     favoriteCount: 3567,
     tags: ['欧元', '流通钞', '欧洲一体化'],
     createdAt: '2024-01-18',
+    designElements: ['建筑', '艺术', '符号'],
   },
   {
     id: 'eu-50-2017',
@@ -234,6 +244,7 @@ export const banknotes: Banknote[] = [
     favoriteCount: 2945,
     tags: ['欧元', '欧罗巴系列', '流通钞'],
     createdAt: '2024-02-05',
+    designElements: ['建筑', '人物', '艺术', '符号'],
   },
   {
     id: 'ch-1000-2019',
@@ -255,6 +266,7 @@ export const banknotes: Banknote[] = [
     favoriteCount: 5234,
     tags: ['瑞士法郎', '高面额', '垂直设计', '现代设计'],
     createdAt: '2024-01-02',
+    designElements: ['科技', '艺术', '符号'],
   },
   {
     id: 'ch-100-2016',
@@ -276,6 +288,7 @@ export const banknotes: Banknote[] = [
     favoriteCount: 3124,
     tags: ['瑞士法郎', '人道主义', '现代设计'],
     createdAt: '2024-02-18',
+    designElements: ['自然', '艺术', '符号'],
   },
   {
     id: 'sg-1000-2014',
@@ -297,6 +310,7 @@ export const banknotes: Banknote[] = [
     favoriteCount: 2789,
     tags: ['新加坡元', '聚合物', '高面额'],
     createdAt: '2024-01-22',
+    designElements: ['人物', '建筑', '符号'],
   },
   {
     id: 'au-100-2020',
@@ -318,6 +332,7 @@ export const banknotes: Banknote[] = [
     favoriteCount: 2567,
     tags: ['澳元', '聚合物', '世界首创'],
     createdAt: '2024-01-25',
+    designElements: ['人物', '艺术', '历史'],
   },
   {
     id: 'ca-100-2011',
@@ -339,6 +354,7 @@ export const banknotes: Banknote[] = [
     favoriteCount: 2345,
     tags: ['加元', '聚合物', '科技主题'],
     createdAt: '2024-02-12',
+    designElements: ['人物', '科技', '历史'],
   },
   {
     id: 'kr-50000-2009',
@@ -360,6 +376,7 @@ export const banknotes: Banknote[] = [
     favoriteCount: 3456,
     tags: ['韩元', '女性肖像', '艺术'],
     createdAt: '2024-01-10',
+    designElements: ['人物', '艺术', '自然'],
   },
   {
     id: 'in-2000-2016',
@@ -381,6 +398,7 @@ export const banknotes: Banknote[] = [
     favoriteCount: 2890,
     tags: ['印度卢比', '航天科技', '高面额'],
     createdAt: '2024-01-28',
+    designElements: ['人物', '科技', '符号'],
   },
   {
     id: 'br-100-2010',
@@ -402,6 +420,7 @@ export const banknotes: Banknote[] = [
     favoriteCount: 2456,
     tags: ['巴西雷亚尔', '野生动物', '亚马逊'],
     createdAt: '2024-02-02',
+    designElements: ['人物', '动物', '自然', '符号'],
   },
   {
     id: 'hk-1000-2018',
@@ -423,6 +442,7 @@ export const banknotes: Banknote[] = [
     favoriteCount: 3789,
     tags: ['港币', '汇丰银行', '金融中心'],
     createdAt: '2024-01-15',
+    designElements: ['建筑', '动物', '符号'],
   },
   {
     id: 'my-100-2012',
@@ -444,6 +464,7 @@ export const banknotes: Banknote[] = [
     favoriteCount: 2134,
     tags: ['马来西亚林吉特', '自然风光', '生物多样性'],
     createdAt: '2024-02-08',
+    designElements: ['人物', '自然', '符号'],
   },
   {
     id: 'th-1000-2015',
@@ -465,6 +486,7 @@ export const banknotes: Banknote[] = [
     favoriteCount: 3567,
     tags: ['泰铢', '国王纪念', '皇家主题'],
     createdAt: '2024-01-20',
+    designElements: ['人物', '建筑', '自然', '历史'],
   },
   {
     id: 'id-100000-2016',
@@ -486,6 +508,7 @@ export const banknotes: Banknote[] = [
     favoriteCount: 2345,
     tags: ['印尼盾', '高面额', '世界遗产'],
     createdAt: '2024-02-22',
+    designElements: ['人物', '建筑', '自然', '历史', '艺术'],
   },
   {
     id: 'ru-5000-2010',
@@ -507,8 +530,29 @@ export const banknotes: Banknote[] = [
     favoriteCount: 2890,
     tags: ['俄罗斯卢布', '野生动物', '远东地区'],
     createdAt: '2024-01-30',
+    designElements: ['动物', '建筑', '自然'],
   },
 ];
+
+export const getBanknotesByDesignElement = (element: string): Banknote[] => {
+  return banknotes.filter(b => b.designElements.includes(element as any));
+};
+
+export const getRandomBanknotes = (count: number = 1, excludeIds: string[] = []): Banknote[] => {
+  const available = banknotes.filter(b => !excludeIds.includes(b.id));
+  const shuffled = [...available].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, Math.min(count, shuffled.length));
+};
+
+export const getDesignElementCounts = (): Record<string, number> => {
+  const counts: Record<string, number> = {};
+  banknotes.forEach(b => {
+    b.designElements.forEach(e => {
+      counts[e] = (counts[e] || 0) + 1;
+    });
+  });
+  return counts;
+};
 
 export const getBanknoteById = (id: string): Banknote | undefined => {
   return banknotes.find(b => b.id === id);

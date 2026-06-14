@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { banknotes, getBanknoteById, getBanknotesByCountry, getBanknotesByYear, getPopularBanknotes, getLatestBanknotes, getRelatedBanknotes, getYears } from '@/data/banknotes';
+import { banknotes, getBanknoteById, getBanknotesByCountry, getBanknotesByYear, getPopularBanknotes, getLatestBanknotes, getRelatedBanknotes, getYears, getBanknotesByDesignElement, getRandomBanknotes, getDesignElementCounts } from '@/data/banknotes';
 import type { Banknote } from '@/types';
 
 interface BanknoteStore {
@@ -11,6 +11,9 @@ interface BanknoteStore {
   getLatestBanknotes: (limit?: number) => Banknote[];
   getRelatedBanknotes: (currentId: string, limit?: number) => Banknote[];
   getYears: () => number[];
+  getBanknotesByDesignElement: (element: string) => Banknote[];
+  getRandomBanknotes: (count?: number, excludeIds?: string[]) => Banknote[];
+  getDesignElementCounts: () => Record<string, number>;
   filterBanknotes: (filters: {
     search?: string;
     country?: string;
@@ -18,6 +21,7 @@ interface BanknoteStore {
     yearTo?: number | null;
     denomination?: string;
     material?: string;
+    designElement?: string;
     sortBy?: 'year' | 'country' | 'favorite';
     sortOrder?: 'asc' | 'desc';
   }) => Banknote[];
@@ -32,6 +36,9 @@ export const useBanknoteStore = create<BanknoteStore>(() => ({
   getLatestBanknotes,
   getRelatedBanknotes,
   getYears,
+  getBanknotesByDesignElement,
+  getRandomBanknotes,
+  getDesignElementCounts,
   filterBanknotes: (filters) => {
     let result = [...banknotes];
     
@@ -45,7 +52,8 @@ export const useBanknoteStore = create<BanknoteStore>(() => ({
           b.year.toString().includes(searchLower) ||
           b.obverseDesign.toLowerCase().includes(searchLower) ||
           b.reverseDesign.toLowerCase().includes(searchLower) ||
-          b.tags.some((t) => t.toLowerCase().includes(searchLower))
+          b.tags.some((t) => t.toLowerCase().includes(searchLower)) ||
+          b.designElements.some((e) => e.toLowerCase().includes(searchLower))
       );
     }
     
@@ -67,6 +75,10 @@ export const useBanknoteStore = create<BanknoteStore>(() => ({
     
     if (filters.material && filters.material !== '全部') {
       result = result.filter((b) => b.material === filters.material);
+    }
+    
+    if (filters.designElement && filters.designElement !== '全部') {
+      result = result.filter((b) => b.designElements.includes(filters.designElement as any));
     }
     
     if (filters.sortBy) {

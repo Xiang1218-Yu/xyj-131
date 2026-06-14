@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Globe, Calendar, DollarSign, TrendingUp, Sparkles, ArrowRight, Coins } from 'lucide-react';
+import { Globe, Calendar, DollarSign, TrendingUp, Sparkles, ArrowRight, Coins, Shield, Gift, Palette } from 'lucide-react';
 import { useBanknoteStore } from '@/store/useBanknoteStore';
 import BanknoteGrid from '@/components/banknote/BanknoteGrid';
 import SearchBar from '@/components/common/SearchBar';
 import { countries } from '@/data/countries';
 import { getYears } from '@/data/banknotes';
+import { securityFeatures } from '@/data/securityFeatures';
 import { formatNumber } from '@/utils/cn';
 
 export default function Home() {
@@ -59,6 +60,33 @@ export default function Home() {
       color: 'from-purple-600/20 to-purple-900/20',
       borderColor: 'border-purple-500/30',
       iconColor: 'text-purple-400',
+    },
+    {
+      icon: Palette,
+      title: '设计元素',
+      description: '人物、建筑、自然等8大主题',
+      path: '/design-elements',
+      color: 'from-pink-600/20 to-pink-900/20',
+      borderColor: 'border-pink-500/30',
+      iconColor: 'text-pink-400',
+    },
+    {
+      icon: Shield,
+      title: '防伪百科',
+      description: `${securityFeatures.length} 种防伪技术详解`,
+      path: '/security-features',
+      color: 'from-amber-600/20 to-amber-900/20',
+      borderColor: 'border-amber-500/30',
+      iconColor: 'text-amber-400',
+    },
+    {
+      icon: Gift,
+      title: '幸运抽卡',
+      description: '沉浸式随机探索体验',
+      path: '/lucky-draw',
+      color: 'from-rose-600/20 to-rose-900/20',
+      borderColor: 'border-rose-500/30',
+      iconColor: 'text-rose-400',
     },
   ];
 
@@ -119,7 +147,7 @@ export default function Home() {
             </div>
 
             <div
-              className={`grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto transition-all duration-1000 delay-300 ${
+              className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto transition-all duration-1000 delay-300 ${
                 loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
               }`}
             >
