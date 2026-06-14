@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Timer, ChevronRight, CheckCircle, XCircle, Zap, ArrowRight } from 'lucide-react';
+import { Timer, CheckCircle, XCircle, Zap, ArrowRight } from 'lucide-react';
 import { useQuizStore } from '@/store/useQuizStore';
 import { categoryMeta } from '@/data/quizData';
 import { cn } from '@/utils/cn';

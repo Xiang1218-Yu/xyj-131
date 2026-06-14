@@ -23,7 +23,7 @@ interface BanknoteStore {
   }) => Banknote[];
 }
 
-export const useBanknoteStore = create<BanknoteStore>((get) => ({
+export const useBanknoteStore = create<BanknoteStore>(() => ({
   banknotes,
   getBanknoteById,
   getBanknotesByCountry,

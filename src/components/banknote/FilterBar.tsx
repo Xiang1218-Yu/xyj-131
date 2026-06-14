@@ -144,7 +144,7 @@ export default function FilterBar({ showSearch = true, className }: FilterBarPro
           <div className="flex gap-2">
             <select
               value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as any)}
+              onChange={(e) => setSortBy(e.target.value as 'year' | 'country' | 'favorite')}
               className="flex-1 bg-background border border-gold/20 rounded-sm px-3 py-2.5 text-parchment focus:outline-none focus:border-gold/50 transition-all cursor-pointer text-sm"
             >
               {sortOptions.map((o) => (

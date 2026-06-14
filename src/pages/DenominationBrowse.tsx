@@ -1,15 +1,9 @@
 import { useState, useMemo } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { DollarSign, ChevronRight, Coins } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { DollarSign, Coins } from 'lucide-react';
 import { useBanknoteStore } from '@/store/useBanknoteStore';
 import BanknoteGrid from '@/components/banknote/BanknoteGrid';
 import { cn } from '@/utils/cn';
-
-interface DenominationGroup {
-  currency: string;
-  values: string[];
-  count: number;
-}
 
 export default function DenominationBrowse() {
   const navigate = useNavigate();

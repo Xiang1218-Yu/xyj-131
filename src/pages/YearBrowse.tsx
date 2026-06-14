@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Calendar, ChevronRight, Clock } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Calendar, Clock } from 'lucide-react';
 import { useBanknoteStore } from '@/store/useBanknoteStore';
 import BanknoteGrid from '@/components/banknote/BanknoteGrid';
 import { cn } from '@/utils/cn';

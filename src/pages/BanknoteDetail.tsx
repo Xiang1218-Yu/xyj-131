@@ -28,17 +28,18 @@ export default function BanknoteDetail() {
     url: typeof window !== 'undefined' ? window.location.href : '',
     images: banknote ? [banknote.obverseImage, banknote.reverseImage] : [],
   });
+  const { setContent: setShareContent } = share;
 
   useEffect(() => {
     if (banknote) {
-      share.setContent({
+      setShareContent({
         title: `${banknote.country} ${banknote.denomination} ${banknote.currency} - 世界纸币收藏馆`,
         text: `${banknote.year}年发行，${banknote.obverseDesign}`,
         url: typeof window !== 'undefined' ? window.location.href : '',
         images: [banknote.obverseImage, banknote.reverseImage],
       });
     }
-  }, [banknote, share]);
+  }, [banknote, setShareContent]);
 
   if (!banknote) {
     return (
@@ -157,7 +158,7 @@ export default function BanknoteDetail() {
             </div>
 
             <div className="grid grid-cols-2 gap-4 mb-8">
-              {infoItems.map((item, index) => {
+              {infoItems.map((item) => {
                 const Icon = item.icon;
                 return (
                   <div

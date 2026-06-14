@@ -24,12 +24,27 @@ export interface UseShareReturn {
 export function useShare(initialContent?: ShareContent): UseShareReturn {
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [content, setContent] = useState<ShareContent>(
+  const [content, _setContent] = useState<ShareContent>(
     initialContent || {
       title: document.title,
       url: typeof window !== 'undefined' ? window.location.href : '',
     }
   );
+
+  const setContent = useCallback((newContent: ShareContent) => {
+    _setContent(prev => {
+      if (
+        prev.title === newContent.title &&
+        prev.text === newContent.text &&
+        prev.url === newContent.url &&
+        prev.images?.length === newContent.images?.length &&
+        prev.images?.every((img, i) => img === newContent.images?.[i])
+      ) {
+        return prev;
+      }
+      return newContent;
+    });
+  }, []);
 
   const canShareNative =
     typeof navigator !== 'undefined' &&

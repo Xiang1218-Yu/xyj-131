@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, Share2, Link, Download, Image, Check, Smartphone } from 'lucide-react';
+import { X, Link, Download, Image, Check, Smartphone } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import type { ShareContent } from '@/hooks/useShare';
 

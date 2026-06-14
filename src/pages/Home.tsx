@@ -201,7 +201,7 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {latestBanknotes.map((banknote, index) => (
+            {latestBanknotes.map((banknote) => (
               <Link
                 key={banknote.id}
                 to={`/banknote/${banknote.id}`}
@@ -242,7 +242,7 @@ export default function Home() {
                 { value: totalCountries, label: '国家地区' },
                 { value: totalYears, label: '发行年份' },
                 { value: formatNumber(banknotes.reduce((sum, b) => sum + b.favoriteCount, 0)), label: '收藏总数' },
-              ].map((stat, index) => (
+              ].map((stat) => (
                 <div
                   key={stat.label}
                   className="text-center p-6 border border-gold/10 rounded-sm bg-background-light/30"
