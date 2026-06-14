@@ -19,6 +19,7 @@ import Timeline from "@/pages/Timeline";
 import SecurityFeatures from "@/pages/SecurityFeatures";
 import LuckyDraw from "@/pages/LuckyDraw";
 import DesignElements from "@/pages/DesignElements";
+import CurrencyConverter from "@/pages/CurrencyConverter";
 
 export default function App() {
   return (
@@ -34,6 +35,7 @@ export default function App() {
           <Route path="/design-elements" element={<DesignElements />} />
           <Route path="/timeline" element={<Timeline />} />
           <Route path="/security-features" element={<SecurityFeatures />} />
+          <Route path="/currency-converter" element={<CurrencyConverter />} />
           <Route path="/lucky-draw" element={<LuckyDraw />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/quiz" element={<QuizCategorySelect />} />

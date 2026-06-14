@@ -6,6 +6,7 @@ import { useFavoriteStore } from '@/store/useFavoriteStore';
 import { useShare } from '@/hooks/useShare';
 import ImageGallery from '@/components/banknote/ImageGallery';
 import BanknoteGrid from '@/components/banknote/BanknoteGrid';
+import NotePanel from '@/components/banknote/NotePanel';
 import StarRating from '@/components/common/StarRating';
 import EmptyState from '@/components/common/EmptyState';
 import ShareModal from '@/components/common/ShareModal';
@@ -248,6 +249,11 @@ export default function BanknoteDetail() {
             </div>
           </div>
         </div>
+
+        <NotePanel
+          banknoteId={banknote.id}
+          banknoteTitle={`${banknote.country} ${banknote.denomination}${banknote.currency}`}
+        />
 
         {relatedBanknotes.length > 0 && (
           <div>

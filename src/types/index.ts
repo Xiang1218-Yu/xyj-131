@@ -97,3 +97,42 @@ export interface QuizResult {
   answers: QuizAnswer[];
   questions: QuizQuestion[];
 }
+
+export interface Note {
+  id: string;
+  banknoteId: string;
+  title: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  tags: string[];
+}
+
+export interface NoteState {
+  notes: Note[];
+  addNote: (banknoteId: string, note: Omit<Note, 'id' | 'banknoteId' | 'createdAt' | 'updatedAt'>) => Note;
+  updateNote: (noteId: string, updates: Partial<Omit<Note, 'id' | 'banknoteId' | 'createdAt'>>) => void;
+  deleteNote: (noteId: string) => void;
+  getNotesByBanknoteId: (banknoteId: string) => Note[];
+  getAllNotes: () => Note[];
+}
+
+export interface HistoricalExchangeRate {
+  currencyCode: string;
+  currencyName: string;
+  year: number;
+  rateToUSD: number;
+  inflationFactor: number;
+  funFact: string;
+}
+
+export interface CurrencyConversionResult {
+  originalAmount: number;
+  originalCurrency: string;
+  originalYear: number;
+  targetCurrency: string;
+  targetYear: number;
+  equivalentAmount: number;
+  historicalComparison: string;
+  funFacts: string[];
+}
