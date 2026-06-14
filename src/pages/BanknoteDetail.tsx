@@ -1,6 +1,6 @@
 import { useMemo, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Heart, MapPin, Calendar, DollarSign, Ruler, Palette, Shield, ArrowLeft, Share2, Tag, Globe } from 'lucide-react';
+import { Heart, MapPin, Calendar, DollarSign, Ruler, Palette, Shield, ArrowLeft, Share2, Tag, Globe, Tags } from 'lucide-react';
 import { useBanknoteStore } from '@/store/useBanknoteStore';
 import { useFavoriteStore } from '@/store/useFavoriteStore';
 import { useShare } from '@/hooks/useShare';
@@ -10,8 +10,10 @@ import NotePanel from '@/components/banknote/NotePanel';
 import StarRating from '@/components/common/StarRating';
 import EmptyState from '@/components/common/EmptyState';
 import ShareModal from '@/components/common/ShareModal';
+import TagWithTooltip from '@/components/common/TagWithTooltip';
 import { formatNumber, getRarityLabel, getRarityColor, cn } from '@/utils/cn';
 import { countries } from '@/data/countries';
+import { getRelatedTags } from '@/data/banknotes';
 
 export default function BanknoteDetail() {
   const { id } = useParams<{ id: string }>();
@@ -205,14 +207,8 @@ export default function BanknoteDetail() {
                 标签
               </h3>
               <div className="flex flex-wrap gap-2">
-                {banknote.tags.map((t, index) => (
-                  <Link
-                    key={index}
-                    to={`/banknotes?tag=${encodeURIComponent(t)}`}
-                    className="px-3 py-1.5 bg-background-light text-gold-muted rounded-sm font-sans text-xs border border-gold/10 hover:border-gold/50 hover:bg-gold/10 hover:text-gold transition-all"
-                  >
-                    #{t}
-                  </Link>
+                {banknote.tags.map((t) => (
+                  <TagWithTooltip key={t} tagName={t} />
                 ))}
               </div>
             </div>
@@ -257,6 +253,8 @@ export default function BanknoteDetail() {
           banknoteTitle={`${banknote.country} ${banknote.denomination}${banknote.currency}`}
         />
 
+        <RelatedTagsSection banknote={banknote} />
+
         {relatedBanknotes.length > 0 && (
           <div>
             <div className="text-center mb-12">
@@ -286,6 +284,86 @@ export default function BanknoteDetail() {
           showSaveImage={true}
         />
       )}
+    </div>
+  );
+}
+
+import type { Banknote } from '@/types';
+import { getTagCategory } from '@/data/banknotes';
+import type { TagCategory } from '@/data/banknotes';
+
+const categoryColorMap: Record<TagCategory, string> = {
+  '货币类型': 'border-gold/30 bg-gold/10 text-gold',
+  '版别系列': 'border-copper/30 bg-copper/10 text-copper-light',
+  '特殊属性': 'border-burgundy/30 bg-burgundy/10 text-burgundy-light',
+  '设计主题': 'border-navy/30 bg-navy/10 text-navy-light',
+  '地域': 'border-emerald-600/30 bg-emerald-900/20 text-emerald-400',
+};
+
+function RelatedTagsSection({ banknote }: { banknote: Banknote }) {
+  const allRelatedTags = useMemo(() => {
+    const tags: ReturnType<typeof getRelatedTags> = [];
+    const seen = new Set<string>();
+    banknote.tags.forEach(tag => {
+      getRelatedTags(tag, 6).forEach(related => {
+        if (!seen.has(related.name) && !banknote.tags.includes(related.name)) {
+          seen.add(related.name);
+          tags.push(related);
+        }
+      });
+    });
+    return tags.slice(0, 12);
+  }, [banknote.tags]);
+
+  if (allRelatedTags.length === 0) return null;
+
+  return (
+    <div className="mb-20">
+      <div className="text-center mb-8">
+        <div className="flex items-center justify-center gap-2 mb-2">
+          <Tags size={20} className="text-gold" />
+          <span className="text-gold font-display tracking-widest text-sm">RELATED TAGS</span>
+        </div>
+        <h2 className="section-title">相关标签</h2>
+        <div className="gold-divider mb-4" />
+        <p className="section-subtitle">
+          与本纸币标签关联的其他热门标签
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {allRelatedTags.map(tag => {
+          const category = getTagCategory(tag.name);
+          const colorClass = categoryColorMap[category];
+          return (
+            <Link
+              key={tag.name}
+              to={`/banknotes?tag=${encodeURIComponent(tag.name)}`}
+              className={cn(
+                'group flex items-center justify-between p-4 rounded-sm border transition-all duration-300',
+                colorClass,
+                'hover:-translate-y-1 hover:shadow-gold'
+              )}
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-background/40 flex items-center justify-center text-lg font-display group-hover:scale-110 transition-transform">
+                  {tag.name.charAt(0)}
+                </div>
+                <div>
+                  <div className="font-display text-sm text-parchment group-hover:text-gold transition-colors">
+                    #{tag.name}
+                  </div>
+                  <div className="text-xs opacity-70">{category}</div>
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="font-display text-lg gold-gradient-text">{tag.count}</div>
+                <div className="text-[10px] opacity-60">张纸币</div>
+              </div>
+            </Link>
+          );
+        })}
+      </div>
     </div>
   );
 }

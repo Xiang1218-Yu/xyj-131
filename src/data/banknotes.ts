@@ -1,4 +1,4 @@
-import type { Banknote } from '@/types';
+import type { Banknote, DesignElementCategory } from '@/types';
 
 const imgPrompt = (desc: string) => 
   `https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=${encodeURIComponent(desc)}&image_size=landscape_16_9`;
@@ -535,7 +535,7 @@ export const banknotes: Banknote[] = [
 ];
 
 export const getBanknotesByDesignElement = (element: string): Banknote[] => {
-  return banknotes.filter(b => b.designElements.includes(element as any));
+  return banknotes.filter(b => b.designElements.includes(element as DesignElementCategory));
 };
 
 export const getRandomBanknotes = (count: number = 1, excludeIds: string[] = []): Banknote[] => {
@@ -595,4 +595,131 @@ export const getYears = (): number[] => {
 export const getDenominations = (): string[] => {
   const denoms = [...new Set(banknotes.map(b => `${b.denomination} ${b.currency}`))];
   return denoms;
+};
+
+export interface TagInfo {
+  name: string;
+  count: number;
+  banknoteIds: string[];
+  totalFavorites: number;
+}
+
+export const getAllTags = (): TagInfo[] => {
+  const tagMap = new Map<string, { count: number; banknoteIds: string[]; totalFavorites: number }>();
+  banknotes.forEach(b => {
+    b.tags.forEach(t => {
+      const existing = tagMap.get(t);
+      if (existing) {
+        existing.count += 1;
+        existing.banknoteIds.push(b.id);
+        existing.totalFavorites += b.favoriteCount;
+      } else {
+        tagMap.set(t, { count: 1, banknoteIds: [b.id], totalFavorites: b.favoriteCount });
+      }
+    });
+  });
+  return Array.from(tagMap.entries()).map(([name, info]) => ({
+    name,
+    ...info,
+  }));
+};
+
+export const getTagInfo = (tagName: string): TagInfo | undefined => {
+  return getAllTags().find(t => t.name === tagName);
+};
+
+export const getBanknotesByTag = (tagName: string): Banknote[] => {
+  return banknotes.filter(b => b.tags.includes(tagName));
+};
+
+export const getRelatedTags = (tagName: string, limit: number = 10): TagInfo[] => {
+  const targetBanknotes = getBanknotesByTag(tagName);
+  const coOccurrence = new Map<string, number>();
+  targetBanknotes.forEach(b => {
+    b.tags.forEach(t => {
+      if (t !== tagName) {
+        coOccurrence.set(t, (coOccurrence.get(t) || 0) + 1);
+      }
+    });
+  });
+  const allTags = getAllTags();
+  return Array.from(coOccurrence.entries())
+    .map(([name, count]) => {
+      const info = allTags.find(t => t.name === name);
+      return info ? { ...info, count } : null;
+    })
+    .filter((t): t is TagInfo & { count: number } => t !== null)
+    .sort((a, b) => b.count - a.count)
+    .slice(0, limit);
+};
+
+export type TagCategory = '货币类型' | '版别系列' | '特殊属性' | '设计主题' | '地域';
+
+const tagCategoryMap: Record<string, TagCategory> = {
+  '人民币': '货币类型',
+  '美元': '货币类型',
+  '日元': '货币类型',
+  '英镑': '货币类型',
+  '欧元': '货币类型',
+  '瑞士法郎': '货币类型',
+  '新加坡元': '货币类型',
+  '澳元': '货币类型',
+  '加元': '货币类型',
+  '韩元': '货币类型',
+  '印度卢比': '货币类型',
+  '巴西雷亚尔': '货币类型',
+  '港币': '货币类型',
+  '马来西亚林吉特': '货币类型',
+  '泰铢': '货币类型',
+  '印尼盾': '货币类型',
+  '俄罗斯卢布': '货币类型',
+  '第五套': '版别系列',
+  '99版': '版别系列',
+  '欧罗巴系列': '版别系列',
+  '流通钞': '特殊属性',
+  '收藏热门': '特殊属性',
+  '高面额': '特殊属性',
+  '聚合物': '特殊属性',
+  '世界货币': '特殊属性',
+  '世界首创': '特殊属性',
+  '垂直设计': '特殊属性',
+  '现代设计': '特殊属性',
+  '日本文化': '设计主题',
+  '艺术': '设计主题',
+  '女王': '设计主题',
+  '女性肖像': '设计主题',
+  '航天科技': '设计主题',
+  '科技主题': '设计主题',
+  '野生动物': '设计主题',
+  '亚马逊': '设计主题',
+  '国王纪念': '设计主题',
+  '皇家主题': '设计主题',
+  '世界遗产': '设计主题',
+  '自然风光': '设计主题',
+  '生物多样性': '设计主题',
+  '欧洲一体化': '设计主题',
+  '人道主义': '设计主题',
+  '汇丰银行': '地域',
+  '金融中心': '地域',
+  '远东地区': '地域',
+};
+
+export const getTagCategory = (tagName: string): TagCategory => {
+  return tagCategoryMap[tagName] || '特殊属性';
+};
+
+export const getTagsByCategory = (): Record<TagCategory, TagInfo[]> => {
+  const allTags = getAllTags();
+  const result: Record<TagCategory, TagInfo[]> = {
+    '货币类型': [],
+    '版别系列': [],
+    '特殊属性': [],
+    '设计主题': [],
+    '地域': [],
+  };
+  allTags.forEach(tag => {
+    const category = getTagCategory(tag.name);
+    result[category].push(tag);
+  });
+  return result;
 };

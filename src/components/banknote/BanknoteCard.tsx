@@ -5,6 +5,7 @@ import type { Banknote, ViewMode } from '@/types';
 import { useFavoriteStore } from '@/store/useFavoriteStore';
 import { useFilterStore } from '@/store/useFilterStore';
 import StarRating from '@/components/common/StarRating';
+import TagWithTooltip from '@/components/common/TagWithTooltip';
 import { cn, formatNumber, getRarityLabel, getRarityColor } from '@/utils/cn';
 
 interface BanknoteCardProps {
@@ -89,18 +90,14 @@ export default function BanknoteCard({ banknote, index = 0, viewMode = 'grid' }:
         <div className="flex items-center gap-2 flex-shrink-0">
           <div className="flex flex-wrap gap-1 max-w-[140px] justify-end">
             {banknote.tags.slice(0, 2).map((t) => (
-              <button
+              <TagWithTooltip
                 key={t}
-                onClick={(e) => handleTagClick(e, t)}
-                className={cn(
-                  'text-[10px] px-1.5 py-0.5 rounded-sm font-sans transition-colors',
-                  tag === t
-                    ? 'bg-gold text-background'
-                    : 'bg-gold/10 text-gold/70 hover:bg-gold/20'
-                )}
-              >
-                {t}
-              </button>
+                tagName={t}
+                prefix=""
+                onClick={handleTagClick}
+                active={tag === t}
+                className="text-[10px] px-1.5 py-0.5"
+              />
             ))}
           </div>
           <button
@@ -224,18 +221,14 @@ export default function BanknoteCard({ banknote, index = 0, viewMode = 'grid' }:
           <div className="flex items-center justify-between pt-3 border-t border-gold/10">
             <div className="flex flex-wrap gap-1.5">
               {banknote.tags.map((t) => (
-                <button
+                <TagWithTooltip
                   key={t}
-                  onClick={(e) => handleTagClick(e, t)}
-                  className={cn(
-                    'text-xs px-2 py-0.5 rounded-sm font-sans transition-colors',
-                    tag === t
-                      ? 'bg-gold text-background'
-                      : 'bg-gold/10 text-gold/70 hover:bg-gold/20 hover:text-gold'
-                  )}
-                >
-                  {t}
-                </button>
+                  tagName={t}
+                  prefix=""
+                  onClick={handleTagClick}
+                  active={tag === t}
+                  className="text-xs px-2 py-0.5"
+                />
               ))}
             </div>
             <div className="flex items-center gap-1 text-sm text-gold-muted">
@@ -355,18 +348,14 @@ export default function BanknoteCard({ banknote, index = 0, viewMode = 'grid' }:
         <div className="flex items-center justify-between pt-3 border-t border-gold/10">
           <div className="flex flex-wrap gap-1.5">
             {banknote.tags.slice(0, 2).map((t) => (
-              <button
+              <TagWithTooltip
                 key={t}
-                onClick={(e) => handleTagClick(e, t)}
-                className={cn(
-                  'text-xs px-2 py-0.5 rounded-sm font-sans transition-colors',
-                  tag === t
-                    ? 'bg-gold text-background'
-                    : 'bg-gold/10 text-gold/70 hover:bg-gold/20 hover:text-gold'
-                )}
-              >
-                {t}
-              </button>
+                tagName={t}
+                prefix=""
+                onClick={handleTagClick}
+                active={tag === t}
+                className="text-xs px-2 py-0.5"
+              />
             ))}
           </div>
           <div className="flex items-center gap-1 text-sm text-gold-muted">
