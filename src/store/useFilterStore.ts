@@ -19,7 +19,7 @@ const initialState: FilterState = {
   yearFrom: null,
   yearTo: null,
   denomination: '',
-  material: '',
+  material: '全部',
   sortBy: 'favorite',
   sortOrder: 'desc',
 };

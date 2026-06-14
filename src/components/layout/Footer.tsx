@@ -78,29 +78,29 @@ export default function Footer() {
             <h4 className="font-display text-lg text-parchment mb-4 tracking-wider">关于我们</h4>
             <ul className="space-y-3">
               <li>
-                <a href="#" className="font-body text-gold-muted hover:text-gold transition-colors">
+                <Link to="/about" className="font-body text-gold-muted hover:text-gold transition-colors">
                   关于项目
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="font-body text-gold-muted hover:text-gold transition-colors">
+                <Link to="/data-sources" className="font-body text-gold-muted hover:text-gold transition-colors">
                   数据来源
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="font-body text-gold-muted hover:text-gold transition-colors">
+                <Link to="/privacy" className="font-body text-gold-muted hover:text-gold transition-colors">
                   隐私政策
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="font-body text-gold-muted hover:text-gold transition-colors">
+                <Link to="/terms" className="font-body text-gold-muted hover:text-gold transition-colors">
                   使用条款
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="font-body text-gold-muted hover:text-gold transition-colors">
+                <Link to="/contact" className="font-body text-gold-muted hover:text-gold transition-colors">
                   联系我们
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

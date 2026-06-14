@@ -36,7 +36,7 @@ export default function FilterBar({ showSearch = true, className }: FilterBarPro
   const years = useMemo(() => getYears(), [getYears]);
   const denoms = useMemo(() => getDenominations(), []);
 
-  const hasActiveFilters = search || country || yearFrom || yearTo || denomination || material;
+  const hasActiveFilters = search || country || yearFrom || yearTo || denomination || (material && material !== '全部');
 
   const sortOptions = [
     { value: 'favorite', label: '收藏数' },

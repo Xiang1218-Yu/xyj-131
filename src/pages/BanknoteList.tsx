@@ -34,7 +34,7 @@ export default function BanknoteList() {
     if (filters.yearFrom !== null) params.yearFrom = filters.yearFrom.toString();
     if (filters.yearTo !== null) params.yearTo = filters.yearTo.toString();
     if (filters.denomination) params.denomination = filters.denomination;
-    if (filters.material) params.material = filters.material;
+    if (filters.material && filters.material !== '全部') params.material = filters.material;
     
     setSearchParams(params, { replace: true });
   }, [filters.search, filters.country, filters.yearFrom, filters.yearTo, filters.denomination, filters.material, setSearchParams]);
