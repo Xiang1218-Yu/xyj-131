@@ -1,17 +1,17 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, Trash2, Download, Share2, Check, X } from 'lucide-react';
+import { Heart, Trash2, Download, Share2, Check } from 'lucide-react';
 import { useFavoriteStore } from '@/store/useFavoriteStore';
 import { useBanknoteStore } from '@/store/useBanknoteStore';
+import { useShare } from '@/hooks/useShare';
 import BanknoteGrid from '@/components/banknote/BanknoteGrid';
 import EmptyState from '@/components/common/EmptyState';
+import ShareModal from '@/components/common/ShareModal';
 import { formatNumber } from '@/utils/cn';
 
 export default function Favorites() {
   const { ids, removeFavorite } = useFavoriteStore();
   const { banknotes } = useBanknoteStore();
-  const [showShareModal, setShowShareModal] = useState(false);
-  const [copied, setCopied] = useState(false);
   const [exportSuccess, setExportSuccess] = useState(false);
 
   const favoriteBanknotes = useMemo(() => {
@@ -22,42 +22,29 @@ export default function Favorites() {
     return favoriteBanknotes.reduce((sum, b) => sum + b.favoriteCount, 0);
   }, [favoriteBanknotes]);
 
+  const share = useShare({
+    title: '我的纸币收藏 - 世界纸币收藏馆',
+    text: `我在世界纸币收藏馆收藏了 ${favoriteBanknotes.length} 张精美纸币，快来看看吧！`,
+    url: typeof window !== 'undefined' ? window.location.href : '',
+  });
+
+  useEffect(() => {
+    share.setContent({
+      title: '我的纸币收藏 - 世界纸币收藏馆',
+      text: `我在世界纸币收藏馆收藏了 ${favoriteBanknotes.length} 张精美纸币，快来看看吧！`,
+      url: typeof window !== 'undefined' ? window.location.href : '',
+    });
+  }, [favoriteBanknotes.length, share]);
+
   const handleClearAll = () => {
     if (confirm('确定要清空所有收藏吗？')) {
       ids.forEach((id) => removeFavorite(id));
     }
   };
 
-  const handleShare = () => {
-    setShowShareModal(true);
-  };
-
-  const handleCopyLink = async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      alert('复制失败，请手动复制链接');
-    }
-  };
-
-  const handleShareNative = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: '我的纸币收藏 - 世界纸币收藏馆',
-          text: `我在世界纸币收藏馆收藏了 ${favoriteBanknotes.length} 张精美纸币，快来看看吧！`,
-          url: window.location.href,
-        });
-        setShowShareModal(false);
-      } catch {
-        // 用户取消分享
-      }
-    }
-  };
-
   const handleExport = () => {
+    if (favoriteBanknotes.length === 0) return;
+
     const exportData = favoriteBanknotes.map((b) => ({
       国家: b.country,
       年份: b.year,
@@ -153,7 +140,7 @@ export default function Favorites() {
               </p>
               <div className="flex gap-3">
                 <button
-                  onClick={handleShare}
+                  onClick={share.open}
                   className="flex items-center gap-2 px-4 py-2 border border-gold/30 text-gold rounded-sm hover:bg-gold/10 transition-all"
                 >
                   <Share2 size={16} />
@@ -195,60 +182,18 @@ export default function Favorites() {
         )}
       </div>
 
-      {showShareModal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-background-light border border-gold/20 rounded-sm p-8 max-w-md w-full mx-4 animate-fade-in-up">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="font-display text-2xl text-parchment">分享收藏</h3>
-              <button
-                onClick={() => setShowShareModal(false)}
-                className="w-8 h-8 flex items-center justify-center text-gold-muted hover:text-gold transition-colors"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            <p className="text-gold-muted mb-6 font-body">
-              分享您收藏的 {favoriteBanknotes.length} 张精美纸币给朋友
-            </p>
-
-            <div className="space-y-4">
-              <button
-                onClick={handleCopyLink}
-                className="w-full flex items-center gap-3 px-6 py-4 border border-gold/30 text-gold rounded-sm hover:bg-gold/10 transition-all"
-              >
-                {copied ? (
-                  <>
-                    <Check size={20} className="text-green-500" />
-                    <span className="font-display tracking-wider">链接已复制</span>
-                  </>
-                ) : (
-                  <>
-                    <Share2 size={20} />
-                    <span className="font-display tracking-wider">复制链接</span>
-                  </>
-                )}
-              </button>
-
-              {typeof navigator !== 'undefined' && 'share' in navigator && (
-                <button
-                  onClick={handleShareNative}
-                  className="w-full flex items-center gap-3 px-6 py-4 bg-gradient-to-r from-gold to-gold-dark text-background rounded-sm hover:opacity-90 transition-all font-display tracking-wider"
-                >
-                  <Share2 size={20} />
-                  <span>系统分享</span>
-                </button>
-              )}
-            </div>
-
-            <div className="mt-6 p-4 bg-background/50 rounded-sm">
-              <p className="text-xs text-gold-muted font-sans break-all">
-                {window.location.href}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
+      <ShareModal
+        isOpen={share.isOpen}
+        onClose={share.close}
+        content={share.content}
+        onCopyLink={share.copyLink}
+        onShareNative={share.shareNative}
+        copied={share.copied}
+        canShareNative={share.canShareNative}
+        title="分享收藏"
+        description={`分享您收藏的 ${favoriteBanknotes.length} 张精美纸币给朋友`}
+        showSaveImage={false}
+      />
     </div>
   );
 }

@@ -1,12 +1,14 @@
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Heart, MapPin, Calendar, DollarSign, Ruler, Palette, Shield, ArrowLeft, Share2, Tag, Globe } from 'lucide-react';
 import { useBanknoteStore } from '@/store/useBanknoteStore';
 import { useFavoriteStore } from '@/store/useFavoriteStore';
+import { useShare } from '@/hooks/useShare';
 import ImageGallery from '@/components/banknote/ImageGallery';
 import BanknoteGrid from '@/components/banknote/BanknoteGrid';
 import StarRating from '@/components/common/StarRating';
 import EmptyState from '@/components/common/EmptyState';
+import ShareModal from '@/components/common/ShareModal';
 import { formatNumber, getRarityLabel, getRarityColor, cn } from '@/utils/cn';
 import { countries } from '@/data/countries';
 
@@ -19,6 +21,24 @@ export default function BanknoteDetail() {
   const relatedBanknotes = useMemo(() => (id ? getRelatedBanknotes(id, 4) : []), [id, getRelatedBanknotes]);
   const favorite = banknote ? isFavorite(banknote.id) : false;
   const countryInfo = banknote ? countries.find(c => c.code === banknote.countryCode) : undefined;
+
+  const share = useShare({
+    title: banknote ? `${banknote.country} ${banknote.denomination} ${banknote.currency} - 世界纸币收藏馆` : '世界纸币收藏馆',
+    text: banknote ? `${banknote.year}年发行，${banknote.obverseDesign}` : '',
+    url: typeof window !== 'undefined' ? window.location.href : '',
+    images: banknote ? [banknote.obverseImage, banknote.reverseImage] : [],
+  });
+
+  useEffect(() => {
+    if (banknote) {
+      share.setContent({
+        title: `${banknote.country} ${banknote.denomination} ${banknote.currency} - 世界纸币收藏馆`,
+        text: `${banknote.year}年发行，${banknote.obverseDesign}`,
+        url: typeof window !== 'undefined' ? window.location.href : '',
+        images: [banknote.obverseImage, banknote.reverseImage],
+      });
+    }
+  }, [banknote, share]);
 
   if (!banknote) {
     return (
@@ -107,10 +127,15 @@ export default function BanknoteDetail() {
                       ? 'bg-gold border-gold text-background animate-bounce'
                       : 'border-gold/30 text-gold hover:border-gold hover:bg-gold/10'
                   )}
+                  aria-label={favorite ? '取消收藏' : '收藏'}
                 >
                   <Heart size={24} className={cn(favorite && 'fill-current')} />
                 </button>
-                <button className="w-14 h-14 rounded-full border-2 border-gold/30 flex items-center justify-center text-gold hover:border-gold hover:bg-gold/10 transition-all duration-300">
+                <button
+                  onClick={share.open}
+                  className="w-14 h-14 rounded-full border-2 border-gold/30 flex items-center justify-center text-gold hover:border-gold hover:bg-gold/10 transition-all duration-300"
+                  aria-label="分享"
+                >
                   <Share2 size={24} />
                 </button>
               </div>
@@ -236,6 +261,22 @@ export default function BanknoteDetail() {
           </div>
         )}
       </div>
+
+      {banknote && (
+        <ShareModal
+          isOpen={share.isOpen}
+          onClose={share.close}
+          content={share.content}
+          onCopyLink={share.copyLink}
+          onShareNative={share.shareNative}
+          onSaveImage={share.saveImage}
+          copied={share.copied}
+          canShareNative={share.canShareNative}
+          title="分享纸币"
+          description={`${banknote.country} ${banknote.denomination} ${banknote.currency}`}
+          showSaveImage={true}
+        />
+      )}
     </div>
   );
 }
