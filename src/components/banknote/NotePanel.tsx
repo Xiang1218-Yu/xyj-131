@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
-import { BookOpen, Plus, Edit3, Trash2, X, Save, Calendar, Tag } from 'lucide-react';
+import { BookOpen, Plus, Edit3, Trash2, X, Save, Calendar, Tag, Link as LinkIcon } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useNoteStore } from '@/store/useNoteStore';
 import type { Note } from '@/types';
 import { cn } from '@/utils/cn';
@@ -10,7 +11,7 @@ interface NotePanelProps {
 }
 
 export default function NotePanel({ banknoteId, banknoteTitle }: NotePanelProps) {
-  const { addNote, updateNote, deleteNote, getNotesByBanknoteId } = useNoteStore();
+  const { notes, addNote, updateNote, deleteNote } = useNoteStore();
   const [isAdding, setIsAdding] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [title, setTitle] = useState('');
@@ -19,8 +20,8 @@ export default function NotePanel({ banknoteId, banknoteTitle }: NotePanelProps)
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const banknoteNotes = useMemo(
-    () => getNotesByBanknoteId(banknoteId),
-    [banknoteId, getNotesByBanknoteId]
+    () => notes.filter((note) => note.banknoteId === banknoteId),
+    [notes, banknoteId]
   );
 
   const resetForm = () => {
@@ -84,15 +85,26 @@ export default function NotePanel({ banknoteId, banknoteTitle }: NotePanelProps)
           <BookOpen size={28} className="text-gold" />
           <h2 className="font-display text-3xl text-parchment">学习笔记</h2>
         </div>
-        {!isAdding && !editingId && (
-          <button
-            onClick={handleStartAdd}
-            className="btn-gold-solid flex items-center gap-2"
-          >
-            <Plus size={18} />
-            添加笔记
-          </button>
-        )}
+        <div className="flex items-center gap-3">
+          {!isAdding && !editingId && (
+            <>
+              <Link
+                to="/notes"
+                className="btn-gold flex items-center gap-2"
+              >
+                <LinkIcon size={16} />
+                全部笔记
+              </Link>
+              <button
+                onClick={handleStartAdd}
+                className="btn-gold-solid flex items-center gap-2"
+              >
+                <Plus size={18} />
+                添加笔记
+              </button>
+            </>
+          )}
+        </div>
       </div>
 
       {(isAdding || editingId) && (

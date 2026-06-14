@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Coins, Globe, Calendar, DollarSign, Heart, Search, Menu, X, Brain, Clock, Shield, Gift, Palette, TrendingUp } from 'lucide-react';
+import { Coins, Globe, Calendar, DollarSign, Heart, Search, Menu, X, Brain, Clock, Shield, Gift, Palette, TrendingUp, BookOpen } from 'lucide-react';
 import { cn } from '@/utils/cn';
 
 const navItems = [
@@ -15,6 +15,7 @@ const navItems = [
   { path: '/currency-converter', label: '货币换算', icon: TrendingUp },
   { path: '/lucky-draw', label: '幸运抽卡', icon: Gift },
   { path: '/quiz', label: '知识答题', icon: Brain },
+  { path: '/notes', label: '我的笔记', icon: BookOpen },
   { path: '/favorites', label: '收藏夹', icon: Heart },
 ];
 
