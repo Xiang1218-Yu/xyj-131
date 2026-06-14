@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Search, X, Clock, TrendingUp, MapPin, Calendar, DollarSign, Tag, Palette } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useSearchStore, type SearchSuggestion } from '@/store/useSearchStore';
@@ -9,6 +10,7 @@ interface SearchBarProps {
   placeholder?: string;
   className?: string;
   onSubmit?: (query?: string) => void;
+  onNavigate?: (params: Record<string, string>) => void;
 }
 
 const typeIcons = {
@@ -33,7 +35,9 @@ export default function SearchBar({
   placeholder = '搜索国家、面值、年份...',
   className,
   onSubmit,
+  onNavigate,
 }: SearchBarProps) {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'suggest' | 'history' | 'hot'>('hot');
   const containerRef = useRef<HTMLDivElement>(null);
@@ -63,6 +67,15 @@ export default function SearchBar({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  const navigateWithParams = (params: Record<string, string>) => {
+    if (onNavigate) {
+      onNavigate(params);
+    } else {
+      const qs = new URLSearchParams(params).toString();
+      navigate(`/banknotes?${qs}`);
+    }
+  };
+
   const handleSubmit = (e?: React.FormEvent, queryOverride?: string) => {
     e?.preventDefault();
     const query = queryOverride ?? value;
@@ -70,18 +83,31 @@ export default function SearchBar({
       addToHistory(query);
     }
     setIsOpen(false);
-    onSubmit?.(query);
+    if (onSubmit) {
+      onSubmit(query);
+    } else if (query.trim()) {
+      navigateWithParams({ search: query });
+    }
   };
 
   const handleSuggestionClick = (suggestion: SearchSuggestion) => {
     const val = suggestion.value;
     onChange(val);
-    handleSubmit(undefined, val);
+    addToHistory(val);
+    setIsOpen(false);
+
+    if (suggestion.filterParams && Object.keys(suggestion.filterParams).length > 0) {
+      navigateWithParams(suggestion.filterParams);
+    } else {
+      navigateWithParams({ search: val });
+    }
   };
 
   const handleHistoryClick = (query: string) => {
     onChange(query);
-    handleSubmit(undefined, query);
+    addToHistory(query);
+    setIsOpen(false);
+    navigateWithParams({ search: query });
   };
 
   const handleClear = () => {

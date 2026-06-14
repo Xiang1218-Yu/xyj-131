@@ -1,9 +1,8 @@
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import { Search, Filter, X, ArrowUpDown } from 'lucide-react';
 import { useFilterStore } from '@/store/useFilterStore';
 import { useBanknoteStore } from '@/store/useBanknoteStore';
-import { countries, materials, designElementOptions } from '@/data/countries';
-import { getDenominations } from '@/data/banknotes';
+import { countries } from '@/data/countries';
 import { cn } from '@/utils/cn';
 
 interface FilterBarProps {
@@ -34,9 +33,66 @@ export default function FilterBar({ showSearch = true, className }: FilterBarPro
     resetFilters,
   } = useFilterStore();
 
-  const { getYears } = useBanknoteStore();
-  const years = useMemo(() => getYears(), [getYears]);
-  const denoms = useMemo(() => getDenominations(), []);
+  const { banknotes } = useBanknoteStore();
+
+  const filteredByCountry = useMemo(() => {
+    if (!country) return banknotes;
+    return banknotes.filter((b) => b.countryCode === country);
+  }, [banknotes, country]);
+
+  const availableDenominations = useMemo(() => {
+    const set = new Set<string>();
+    filteredByCountry.forEach((b) => set.add(`${b.denomination} ${b.currency}`));
+    return Array.from(set).sort();
+  }, [filteredByCountry]);
+
+  const availableYears = useMemo(() => {
+    const set = new Set<number>();
+    filteredByCountry.forEach((b) => set.add(b.year));
+    return Array.from(set).sort((a, b) => b - a);
+  }, [filteredByCountry]);
+
+  const availableMaterials = useMemo(() => {
+    const set = new Set<string>();
+    filteredByCountry.forEach((b) => set.add(b.material));
+    return ['全部', ...Array.from(set).sort()];
+  }, [filteredByCountry]);
+
+  const availableDesignElements = useMemo(() => {
+    const set = new Set<string>();
+    filteredByCountry.forEach((b) => b.designElements.forEach((e) => set.add(e)));
+    return ['全部', ...Array.from(set).sort()];
+  }, [filteredByCountry]);
+
+  useEffect(() => {
+    if (denomination && !availableDenominations.includes(denomination)) {
+      setDenomination('');
+    }
+  }, [country, denomination, availableDenominations, setDenomination]);
+
+  useEffect(() => {
+    if (yearFrom && !availableYears.includes(yearFrom)) {
+      setYearFrom(null);
+    }
+  }, [country, yearFrom, availableYears, setYearFrom]);
+
+  useEffect(() => {
+    if (yearTo && !availableYears.includes(yearTo)) {
+      setYearTo(null);
+    }
+  }, [country, yearTo, availableYears, setYearTo]);
+
+  useEffect(() => {
+    if (material && material !== '全部' && !availableMaterials.includes(material)) {
+      setMaterial('全部');
+    }
+  }, [country, material, availableMaterials, setMaterial]);
+
+  useEffect(() => {
+    if (designElement && designElement !== '全部' && !availableDesignElements.includes(designElement)) {
+      setDesignElement('全部');
+    }
+  }, [country, designElement, availableDesignElements, setDesignElement]);
 
   const hasActiveFilters = search || country || yearFrom || yearTo || denomination || (material && material !== '全部') || (designElement && designElement !== '全部');
 
@@ -86,7 +142,7 @@ export default function FilterBar({ showSearch = true, className }: FilterBarPro
             className="w-full bg-background border border-gold/20 rounded-sm px-4 py-2.5 text-parchment focus:outline-none focus:border-gold/50 transition-all cursor-pointer"
           >
             <option value="">不限</option>
-            {years.map((y) => (
+            {availableYears.map((y) => (
               <option key={`from-${y}`} value={y}>
                 {y}年
               </option>
@@ -102,7 +158,7 @@ export default function FilterBar({ showSearch = true, className }: FilterBarPro
             className="w-full bg-background border border-gold/20 rounded-sm px-4 py-2.5 text-parchment focus:outline-none focus:border-gold/50 transition-all cursor-pointer"
           >
             <option value="">不限</option>
-            {years.map((y) => (
+            {availableYears.map((y) => (
               <option key={`to-${y}`} value={y}>
                 {y}年
               </option>
@@ -118,7 +174,7 @@ export default function FilterBar({ showSearch = true, className }: FilterBarPro
             className="w-full bg-background border border-gold/20 rounded-sm px-4 py-2.5 text-parchment focus:outline-none focus:border-gold/50 transition-all cursor-pointer"
           >
             <option value="">全部面值</option>
-            {denoms.map((d) => (
+            {availableDenominations.map((d) => (
               <option key={d} value={d}>
                 {d}
               </option>
@@ -133,7 +189,7 @@ export default function FilterBar({ showSearch = true, className }: FilterBarPro
             onChange={(e) => setMaterial(e.target.value)}
             className="w-full bg-background border border-gold/20 rounded-sm px-4 py-2.5 text-parchment focus:outline-none focus:border-gold/50 transition-all cursor-pointer"
           >
-            {materials.map((m) => (
+            {availableMaterials.map((m) => (
               <option key={m} value={m}>
                 {m}
               </option>
@@ -148,7 +204,7 @@ export default function FilterBar({ showSearch = true, className }: FilterBarPro
             onChange={(e) => setDesignElement(e.target.value)}
             className="w-full bg-background border border-gold/20 rounded-sm px-4 py-2.5 text-parchment focus:outline-none focus:border-gold/50 transition-all cursor-pointer"
           >
-            {designElementOptions.map((d) => (
+            {availableDesignElements.map((d) => (
               <option key={d} value={d}>
                 {d}
               </option>

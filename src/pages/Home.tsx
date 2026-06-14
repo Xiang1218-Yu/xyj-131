@@ -33,6 +33,11 @@ export default function Home() {
     }
   };
 
+  const handleSearchNavigate = (params: Record<string, string>) => {
+    const qs = new URLSearchParams(params).toString();
+    navigate(`/banknotes?${qs}`);
+  };
+
   const categoryCards = [
     {
       icon: Globe,
@@ -131,6 +136,7 @@ export default function Home() {
                   value={searchValue}
                   onChange={setSearchValue}
                   onSubmit={handleSearch}
+                  onNavigate={handleSearchNavigate}
                   placeholder="搜索国家、面值、年份、图案..."
                   className="animate-glow-pulse"
                 />

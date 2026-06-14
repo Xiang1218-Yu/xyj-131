@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useBanknoteStore } from '@/store/useBanknoteStore';
 import { useFilterStore } from '@/store/useFilterStore';
@@ -9,59 +9,75 @@ import { Filter } from 'lucide-react';
 export default function BanknoteList() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { filterBanknotes } = useBanknoteStore();
-  const setSearch = useFilterStore((s) => s.setSearch);
-  const setCountry = useFilterStore((s) => s.setCountry);
-  const setYearFrom = useFilterStore((s) => s.setYearFrom);
-  const setYearTo = useFilterStore((s) => s.setYearTo);
-  const setDenomination = useFilterStore((s) => s.setDenomination);
-  const setMaterial = useFilterStore((s) => s.setMaterial);
-  const setDesignElement = useFilterStore((s) => s.setDesignElement);
   const filters = useFilterStore();
+  const {
+    search,
+    country,
+    yearFrom,
+    yearTo,
+    denomination,
+    material,
+    designElement,
+    sortBy,
+    sortOrder,
+    setSearch,
+    setCountry,
+    setYearFrom,
+    setYearTo,
+    setDenomination,
+    setMaterial,
+    setDesignElement,
+  } = filters;
+  const initializedRef = useRef(false);
 
   useEffect(() => {
-    const searchQuery = searchParams.get('search');
-    const countryParam = searchParams.get('country');
-    const yearFromParam = searchParams.get('yearFrom');
-    const yearToParam = searchParams.get('yearTo');
-    const denominationParam = searchParams.get('denomination');
-    const materialParam = searchParams.get('material');
-    const designElementParam = searchParams.get('designElement');
+    if (initializedRef.current) return;
+    initializedRef.current = true;
 
-    if (searchQuery !== null && searchQuery !== filters.search) setSearch(searchQuery);
-    if (countryParam !== null && countryParam !== filters.country) setCountry(countryParam);
-    if (yearFromParam !== null && Number(yearFromParam) !== filters.yearFrom) setYearFrom(Number(yearFromParam));
-    if (yearToParam !== null && Number(yearToParam) !== filters.yearTo) setYearTo(Number(yearToParam));
-    if (denominationParam !== null && denominationParam !== filters.denomination) setDenomination(denominationParam);
-    if (materialParam !== null && materialParam !== filters.material) setMaterial(materialParam);
-    if (designElementParam !== null && designElementParam !== filters.designElement) setDesignElement(designElementParam);
-  }, [searchParams]);
+    const sp = searchParams;
+    const searchQuery = sp.get('search');
+    const countryParam = sp.get('country');
+    const yearFromParam = sp.get('yearFrom');
+    const yearToParam = sp.get('yearTo');
+    const denominationParam = sp.get('denomination');
+    const materialParam = sp.get('material');
+    const designElementParam = sp.get('designElement');
+
+    if (searchQuery) setSearch(searchQuery);
+    if (countryParam) setCountry(countryParam);
+    if (yearFromParam) setYearFrom(Number(yearFromParam));
+    if (yearToParam) setYearTo(Number(yearToParam));
+    if (denominationParam) setDenomination(denominationParam);
+    if (materialParam) setMaterial(materialParam);
+    if (designElementParam) setDesignElement(designElementParam);
+  }, [searchParams, setSearch, setCountry, setYearFrom, setYearTo, setDenomination, setMaterial, setDesignElement]);
 
   useEffect(() => {
     const params: Record<string, string> = {};
-    if (filters.search) params.search = filters.search;
-    if (filters.country) params.country = filters.country;
-    if (filters.yearFrom !== null) params.yearFrom = filters.yearFrom.toString();
-    if (filters.yearTo !== null) params.yearTo = filters.yearTo.toString();
-    if (filters.denomination) params.denomination = filters.denomination;
-    if (filters.material && filters.material !== '全部') params.material = filters.material;
-    if (filters.designElement && filters.designElement !== '全部') params.designElement = filters.designElement;
-    
+    if (search) params.search = search;
+    if (country) params.country = country;
+    if (yearFrom !== null) params.yearFrom = yearFrom.toString();
+    if (yearTo !== null) params.yearTo = yearTo.toString();
+    if (denomination) params.denomination = denomination;
+    if (material && material !== '全部') params.material = material;
+    if (designElement && designElement !== '全部') params.designElement = designElement;
+
     setSearchParams(params, { replace: true });
-  }, [filters.search, filters.country, filters.yearFrom, filters.yearTo, filters.denomination, filters.material, filters.designElement, setSearchParams]);
+  }, [search, country, yearFrom, yearTo, denomination, material, designElement, setSearchParams]);
 
   const filteredBanknotes = useMemo(() => {
     return filterBanknotes({
-      search: filters.search,
-      country: filters.country,
-      yearFrom: filters.yearFrom,
-      yearTo: filters.yearTo,
-      denomination: filters.denomination,
-      material: filters.material,
-      designElement: filters.designElement,
-      sortBy: filters.sortBy,
-      sortOrder: filters.sortOrder,
+      search,
+      country,
+      yearFrom,
+      yearTo,
+      denomination,
+      material,
+      designElement,
+      sortBy,
+      sortOrder,
     });
-  }, [filterBanknotes, filters]);
+  }, [filterBanknotes, search, country, yearFrom, yearTo, denomination, material, designElement, sortBy, sortOrder]);
 
   return (
     <div className="min-h-screen py-12">

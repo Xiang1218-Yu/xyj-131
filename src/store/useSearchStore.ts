@@ -9,6 +9,7 @@ export interface SearchSuggestion {
   label: string;
   count?: number;
   flag?: string;
+  filterParams?: Record<string, string>;
 }
 
 interface SearchStore {
@@ -56,16 +57,18 @@ const getHotSearchesInternal = (): SearchSuggestion[] => {
       value: tag,
       label: tag,
       count,
+      filterParams: { search: tag },
     }));
 
-  const topCountries = Object.values(countryCount)
-    .sort((a, b) => b.count - a.count)
+  const topCountries = Object.entries(countryCount)
+    .sort(([, a], [, b]) => b.count - a.count)
     .slice(0, 3)
-    .map((c) => ({
+    .map(([code, c]) => ({
       type: 'country' as const,
       value: c.name,
       label: `${c.flag} ${c.name}`,
       count: c.count,
+      filterParams: { country: code },
     }));
 
   const topDenoms = Object.entries(denominationCount)
@@ -76,6 +79,7 @@ const getHotSearchesInternal = (): SearchSuggestion[] => {
       value: denom,
       label: denom,
       count,
+      filterParams: { denomination: denom },
     }));
 
   return [...topCountries, ...topTags, ...topDenoms].slice(0, 8);
@@ -119,6 +123,7 @@ export const useSearchStore = create<SearchStore>()(
                 value: c.name,
                 label: `${c.flag} ${c.name}`,
                 count,
+                filterParams: { country: c.code },
               });
             }
           }
@@ -139,6 +144,7 @@ export const useSearchStore = create<SearchStore>()(
                 value: year,
                 label: `${year} 年`,
                 count,
+                filterParams: { yearFrom: year, yearTo: year },
               });
             }
           }
@@ -165,6 +171,7 @@ export const useSearchStore = create<SearchStore>()(
                 value: denomStr,
                 label: denomStr,
                 count,
+                filterParams: { denomination: denomStr },
               });
             }
           }
@@ -184,6 +191,7 @@ export const useSearchStore = create<SearchStore>()(
                   value: t,
                   label: `#${t}`,
                   count,
+                  filterParams: { search: t },
                 });
               }
             }
@@ -204,6 +212,7 @@ export const useSearchStore = create<SearchStore>()(
                   value: e,
                   label: e,
                   count,
+                  filterParams: { designElement: e },
                 });
               }
             }
