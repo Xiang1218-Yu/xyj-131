@@ -12,6 +12,10 @@ import DataSources from "@/pages/DataSources";
 import Privacy from "@/pages/Privacy";
 import Terms from "@/pages/Terms";
 import Contact from "@/pages/Contact";
+import QuizCategorySelect from "@/pages/QuizCategorySelect";
+import QuizPlay from "@/pages/QuizPlay";
+import QuizResult from "@/pages/QuizResult";
+import Timeline from "@/pages/Timeline";
 
 export default function App() {
   return (
@@ -25,6 +29,10 @@ export default function App() {
           <Route path="/years" element={<YearBrowse />} />
           <Route path="/denominations" element={<DenominationBrowse />} />
           <Route path="/favorites" element={<Favorites />} />
+          <Route path="/quiz" element={<QuizCategorySelect />} />
+          <Route path="/quiz/play" element={<QuizPlay />} />
+          <Route path="/quiz/result" element={<QuizResult />} />
+          <Route path="/timeline" element={<Timeline />} />
           <Route path="/about" element={<About />} />
           <Route path="/data-sources" element={<DataSources />} />
           <Route path="/privacy" element={<Privacy />} />

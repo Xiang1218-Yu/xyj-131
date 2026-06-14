@@ -45,3 +45,31 @@ export interface FavoriteState {
   removeFavorite: (id: string) => void;
   isFavorite: (id: string) => boolean;
 }
+
+export type QuizCategory = 'country' | 'security' | 'history' | 'design' | 'material';
+
+export interface QuizQuestion {
+  id: string;
+  category: QuizCategory;
+  question: string;
+  options: string[];
+  correctIndex: number;
+  explanation: string;
+  banknoteId?: string;
+}
+
+export interface QuizAnswer {
+  questionId: string;
+  selectedIndex: number;
+  isCorrect: boolean;
+  timeSpent: number;
+}
+
+export interface QuizResult {
+  categories: QuizCategory[];
+  totalQuestions: number;
+  correctCount: number;
+  totalTime: number;
+  answers: QuizAnswer[];
+  questions: QuizQuestion[];
+}

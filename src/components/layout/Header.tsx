@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Coins, Globe, Calendar, DollarSign, Heart, Search, Menu, X } from 'lucide-react';
+import { Coins, Globe, Calendar, DollarSign, Heart, Search, Menu, X, Brain, Clock } from 'lucide-react';
 import { cn } from '@/utils/cn';
 
 const navItems = [
@@ -9,6 +9,8 @@ const navItems = [
   { path: '/countries', label: '按国家', icon: Globe },
   { path: '/years', label: '按年份', icon: Calendar },
   { path: '/denominations', label: '按面值', icon: DollarSign },
+  { path: '/timeline', label: '时间轴', icon: Clock },
+  { path: '/quiz', label: '知识答题', icon: Brain },
   { path: '/favorites', label: '收藏夹', icon: Heart },
 ];
 
@@ -63,7 +65,8 @@ export default function Header() {
           <nav className="hidden lg:flex items-center gap-1">
             {navItems.map((item) => {
               const Icon = item.icon;
-              const isActive = location.pathname === item.path;
+              const isActive = location.pathname === item.path ||
+                (item.path === '/quiz' && location.pathname.startsWith('/quiz'));
               return (
                 <Link
                   key={item.path}
@@ -118,7 +121,8 @@ export default function Header() {
             <nav className="flex flex-col gap-1">
               {navItems.map((item) => {
                 const Icon = item.icon;
-                const isActive = location.pathname === item.path;
+                const isActive = location.pathname === item.path ||
+                (item.path === '/quiz' && location.pathname.startsWith('/quiz'));
                 return (
                   <Link
                     key={item.path}
