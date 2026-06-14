@@ -96,6 +96,7 @@ export default function BanknoteDetail() {
               country={banknote.country}
               denomination={banknote.denomination}
               currency={banknote.currency}
+              banknoteTitle={`${banknote.country} ${banknote.denomination}${banknote.currency} (${banknote.year}年)`}
             />
           </div>
 
