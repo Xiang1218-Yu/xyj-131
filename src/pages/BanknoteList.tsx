@@ -9,6 +9,13 @@ import { Filter } from 'lucide-react';
 export default function BanknoteList() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { filterBanknotes } = useBanknoteStore();
+  const setSearch = useFilterStore((s) => s.setSearch);
+  const setCountry = useFilterStore((s) => s.setCountry);
+  const setYearFrom = useFilterStore((s) => s.setYearFrom);
+  const setYearTo = useFilterStore((s) => s.setYearTo);
+  const setDenomination = useFilterStore((s) => s.setDenomination);
+  const setMaterial = useFilterStore((s) => s.setMaterial);
+  const setDesignElement = useFilterStore((s) => s.setDesignElement);
   const filters = useFilterStore();
 
   useEffect(() => {
@@ -20,14 +27,14 @@ export default function BanknoteList() {
     const materialParam = searchParams.get('material');
     const designElementParam = searchParams.get('designElement');
 
-    if (searchQuery) filters.setSearch(searchQuery);
-    if (countryParam) filters.setCountry(countryParam);
-    if (yearFromParam) filters.setYearFrom(Number(yearFromParam));
-    if (yearToParam) filters.setYearTo(Number(yearToParam));
-    if (denominationParam) filters.setDenomination(denominationParam);
-    if (materialParam) filters.setMaterial(materialParam);
-    if (designElementParam) filters.setDesignElement(designElementParam);
-  }, [searchParams, filters]);
+    if (searchQuery !== null && searchQuery !== filters.search) setSearch(searchQuery);
+    if (countryParam !== null && countryParam !== filters.country) setCountry(countryParam);
+    if (yearFromParam !== null && Number(yearFromParam) !== filters.yearFrom) setYearFrom(Number(yearFromParam));
+    if (yearToParam !== null && Number(yearToParam) !== filters.yearTo) setYearTo(Number(yearToParam));
+    if (denominationParam !== null && denominationParam !== filters.denomination) setDenomination(denominationParam);
+    if (materialParam !== null && materialParam !== filters.material) setMaterial(materialParam);
+    if (designElementParam !== null && designElementParam !== filters.designElement) setDesignElement(designElementParam);
+  }, [searchParams]);
 
   useEffect(() => {
     const params: Record<string, string> = {};
