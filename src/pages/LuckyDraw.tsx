@@ -321,108 +321,148 @@ export default function LuckyDraw() {
 
         {showDetail && (
           <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/90 backdrop-blur-sm animate-fade-in"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 md:p-8 bg-background/95 backdrop-blur-md animate-fade-in"
             onClick={() => setShowDetail(null)}
           >
             <div
-              className="relative max-w-4xl w-full max-h-[90vh] overflow-y-auto bg-background-light border border-gold/30 rounded-sm shadow-gold-xl"
+              className="relative w-full max-w-5xl h-[90vh] max-h-[800px] flex flex-col bg-background-light border border-gold/30 rounded-sm shadow-gold-2xl"
               onClick={(e) => e.stopPropagation()}
             >
-              <button
-                onClick={() => setShowDetail(null)}
-                className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center text-parchment/70 hover:text-gold hover:bg-gold/10 transition-colors z-10"
-              >
-                <X size={20} />
-              </button>
+              <div className="flex items-center justify-between px-6 py-4 border-b border-gold/20 flex-shrink-0 bg-gradient-to-r from-gold/5 via-transparent to-gold/5">
+                <div className="flex items-center gap-3">
+                  <span className={cn('text-xs font-display tracking-wider px-2 py-1 rounded-sm bg-gold/10', getRarityColor(showDetail.rarity))}>
+                    {getRarityLabel(showDetail.rarity)}
+                  </span>
+                  <h2 className="font-display text-xl md:text-2xl text-parchment">
+                    {showDetail.country} · {showDetail.denomination} {showDetail.currency}
+                  </h2>
+                </div>
+                <button
+                  onClick={() => setShowDetail(null)}
+                  className="w-10 h-10 rounded-full flex items-center justify-center text-parchment/70 hover:text-gold hover:bg-gold/10 transition-all duration-300 flex-shrink-0 border border-gold/20 hover:border-gold/50"
+                  title="关闭"
+                >
+                  <X size={20} />
+                </button>
+              </div>
 
-              <div className="grid md:grid-cols-2 gap-0">
-                <div className="p-8 bg-gradient-to-br from-gold/5 via-background to-copper/5">
-                  <div className="aspect-[16/9] rounded-sm overflow-hidden border border-gold/20 mb-4">
-                    <img
-                      src={showDetail.obverseImage}
-                      alt="正面"
-                      className="w-full h-full object-cover"
-                    />
+              <div className="flex-1 overflow-y-auto overflow-x-hidden">
+                <div className="grid md:grid-cols-2 gap-0 h-full">
+                  <div className="p-6 md:p-8 bg-gradient-to-br from-gold/5 via-background to-copper/5 border-b md:border-b-0 md:border-r border-gold/10">
+                    <div className="space-y-6">
+                      <div>
+                        <h4 className="text-sm text-gold-muted font-display tracking-wider mb-3 flex items-center gap-2">
+                          <Eye size={14} />
+                          正面图案
+                        </h4>
+                        <div className="aspect-[16/9] rounded-sm overflow-hidden border border-gold/20 shadow-gold-lg group">
+                          <img
+                            src={showDetail.obverseImage}
+                            alt="正面"
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <h4 className="text-sm text-gold-muted font-display tracking-wider mb-3 flex items-center gap-2">
+                          <Eye size={14} />
+                          背面图案
+                        </h4>
+                        <div className="aspect-[16/9] rounded-sm overflow-hidden border border-gold/20 shadow-gold-lg group">
+                          <img
+                            src={showDetail.reverseImage}
+                            alt="背面"
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4 pt-2">
+                        <div className="p-4 rounded-sm bg-background/50 border border-gold/10">
+                          <h5 className="text-xs text-gold-muted mb-1 font-display tracking-wider">发行年份</h5>
+                          <p className="font-display text-xl text-parchment">{showDetail.year}年</p>
+                        </div>
+                        <div className="p-4 rounded-sm bg-background/50 border border-gold/10">
+                          <h5 className="text-xs text-gold-muted mb-1 font-display tracking-wider">材质</h5>
+                          <p className="font-display text-xl text-parchment">{showDetail.material}</p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div className="aspect-[16/9] rounded-sm overflow-hidden border border-gold/20">
-                    <img
-                      src={showDetail.reverseImage}
-                      alt="背面"
-                      className="w-full h-full object-cover"
-                    />
+
+                  <div className="p-6 md:p-8">
+                    <div className="space-y-5">
+                      <div>
+                        <h4 className="text-sm text-gold-muted font-display tracking-wider mb-2">正面设计</h4>
+                        <p className="text-parchment/90 leading-relaxed">{showDetail.obverseDesign}</p>
+                      </div>
+                      <div>
+                        <h4 className="text-sm text-gold-muted font-display tracking-wider mb-2">背面设计</h4>
+                        <p className="text-parchment/90 leading-relaxed">{showDetail.reverseDesign}</p>
+                      </div>
+                      <div>
+                        <h4 className="text-sm text-gold-muted font-display tracking-wider mb-2 flex items-center gap-2">
+                          <Sparkles size={14} />
+                          设计元素
+                        </h4>
+                        <div className="flex flex-wrap gap-2">
+                          {showDetail.designElements.map((el) => (
+                            <span key={el} className="px-3 py-1.5 bg-gold/10 text-gold text-sm rounded-sm border border-gold/20 hover:border-gold/50 transition-colors">
+                              {el}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <h4 className="text-sm text-gold-muted font-display tracking-wider mb-2 flex items-center gap-2">
+                          <Shield size={14} />
+                          防伪技术
+                        </h4>
+                        <div className="flex flex-wrap gap-2">
+                          {showDetail.securityFeatures.map((sf) => (
+                            <span key={sf} className="px-3 py-1.5 bg-emerald-900/20 text-emerald-400 text-sm rounded-sm border border-emerald-500/20 flex items-center gap-1 hover:border-emerald-500/40 transition-colors">
+                              <Shield size={12} />
+                              {sf}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="pt-2 border-t border-gold/10">
+                        <h4 className="text-sm text-gold-muted font-display tracking-wider mb-2">历史背景</h4>
+                        <p className="text-parchment/80 leading-relaxed drop-cap">
+                          {showDetail.history}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
+              </div>
 
-                <div className="p-8">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className={cn('text-xs font-display tracking-wider px-2 py-1 rounded-sm bg-gold/10', getRarityColor(showDetail.rarity))}>
-                      {getRarityLabel(showDetail.rarity)}
-                    </span>
-                    <span className="text-gold font-display tracking-wider text-sm">{showDetail.year}年发行</span>
-                  </div>
-                  <h2 className="font-display text-3xl md:text-4xl text-parchment mb-2">
-                    {showDetail.country}
-                  </h2>
-                  <p className="gold-gradient-text font-display text-3xl mb-6">
-                    {showDetail.denomination} {showDetail.currency}
-                  </p>
-
-                  <div className="space-y-4 mb-6">
-                    <div>
-                      <h4 className="text-sm text-gold-muted font-display tracking-wider mb-1">正面设计</h4>
-                      <p className="text-parchment/90">{showDetail.obverseDesign}</p>
-                    </div>
-                    <div>
-                      <h4 className="text-sm text-gold-muted font-display tracking-wider mb-1">背面设计</h4>
-                      <p className="text-parchment/90">{showDetail.reverseDesign}</p>
-                    </div>
-                    <div>
-                      <h4 className="text-sm text-gold-muted font-display tracking-wider mb-1">设计元素</h4>
-                      <div className="flex flex-wrap gap-1.5">
-                        {showDetail.designElements.map((el) => (
-                          <span key={el} className="px-3 py-1 bg-gold/10 text-gold text-sm rounded-sm border border-gold/20">
-                            {el}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                    <div>
-                      <h4 className="text-sm text-gold-muted font-display tracking-wider mb-1">防伪技术</h4>
-                      <div className="flex flex-wrap gap-1.5">
-                        {showDetail.securityFeatures.slice(0, 5).map((sf) => (
-                          <span key={sf} className="px-3 py-1 bg-emerald-900/20 text-emerald-400 text-sm rounded-sm border border-emerald-500/20 flex items-center gap-1">
-                            <Shield size={12} />
-                            {sf}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  <p className="text-parchment/80 leading-relaxed mb-6 drop-cap">
-                    {showDetail.history}
-                  </p>
-
-                  <div className="flex gap-3">
-                    <Link
-                      to={`/banknote/${showDetail.id}`}
-                      className="btn-gold-solid flex-1 flex items-center justify-center gap-2"
-                    >
-                      查看完整详情
-                      <ArrowRight size={18} />
-                    </Link>
-                    <button
-                      onClick={(e) => handleFavoriteClick(e, showDetail)}
-                      className={cn(
-                        'w-12 h-12 rounded-sm border flex items-center justify-center transition-all duration-300',
-                        isFavorite(showDetail.id)
-                          ? 'bg-gold text-background border-gold'
-                          : 'border-gold/30 text-parchment/70 hover:border-gold hover:text-gold'
-                      )}
-                    >
-                      <Heart size={20} className={cn(isFavorite(showDetail.id) && 'fill-current')} />
-                    </button>
-                  </div>
+              <div className="px-6 py-4 border-t border-gold/20 flex items-center justify-between gap-4 flex-shrink-0 bg-gradient-to-r from-gold/5 via-transparent to-gold/5">
+                <div className="flex items-center gap-2 text-sm text-gold-muted">
+                  <Heart size={14} className="fill-gold/30 text-gold/50" />
+                  <span>已有 <span className="text-gold font-display">{formatNumber(showDetail.favoriteCount)}</span> 人收藏</span>
+                </div>
+                <div className="flex gap-3">
+                  <button
+                    onClick={(e) => handleFavoriteClick(e, showDetail)}
+                    className={cn(
+                      'px-5 h-11 rounded-sm border flex items-center justify-center gap-2 transition-all duration-300 font-display tracking-wider text-sm',
+                      isFavorite(showDetail.id)
+                        ? 'bg-gold text-background border-gold hover:bg-gold-light'
+                        : 'border-gold/30 text-parchment/70 hover:border-gold hover:text-gold hover:bg-gold/5'
+                    )}
+                  >
+                    <Heart size={18} className={cn(isFavorite(showDetail.id) && 'fill-current')} />
+                    {isFavorite(showDetail.id) ? '已收藏' : '收藏'}
+                  </button>
+                  <Link
+                    to={`/banknote/${showDetail.id}`}
+                    onClick={() => setShowDetail(null)}
+                    className="btn-gold-solid flex items-center justify-center gap-2 h-11 px-6"
+                  >
+                    查看完整详情
+                    <ArrowRight size={18} />
+                  </Link>
                 </div>
               </div>
             </div>

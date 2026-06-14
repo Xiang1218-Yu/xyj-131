@@ -8,6 +8,7 @@ interface FilterStore extends FilterState {
   setYearTo: (year: number | null) => void;
   setDenomination: (denomination: string) => void;
   setMaterial: (material: string) => void;
+  setDesignElement: (designElement: string) => void;
   setSortBy: (sortBy: FilterState['sortBy']) => void;
   setSortOrder: (sortOrder: FilterState['sortOrder']) => void;
   resetFilters: () => void;
@@ -20,6 +21,7 @@ const initialState: FilterState = {
   yearTo: null,
   denomination: '',
   material: '全部',
+  designElement: '全部',
   sortBy: 'favorite',
   sortOrder: 'desc',
 };
@@ -32,6 +34,7 @@ export const useFilterStore = create<FilterStore>((set) => ({
   setYearTo: (yearTo) => set({ yearTo }),
   setDenomination: (denomination) => set({ denomination }),
   setMaterial: (material) => set({ material }),
+  setDesignElement: (designElement) => set({ designElement }),
   setSortBy: (sortBy) => set({ sortBy }),
   setSortOrder: (sortOrder) => set({ sortOrder }),
   resetFilters: () => set(initialState),

@@ -25,4 +25,6 @@ export const countries: Country[] = [
 
 export const continents = ['全部', '亚洲', '欧洲', '北美洲', '南美洲', '大洋洲', '非洲'];
 
-export const materials = ['全部', '纸质', '塑料', '棉麻', '聚合物'];
+export const materials = ['全部', '纸质', '棉麻', '聚合物'];
+
+export const designElementOptions = ['全部', '人物', '建筑', '自然', '动物', '艺术', '科技', '历史', '符号'];

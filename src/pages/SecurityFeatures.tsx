@@ -210,120 +210,163 @@ export default function SecurityFeatures() {
 
         {selectedFeature && (
           <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/90 backdrop-blur-sm animate-fade-in"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 md:p-8 bg-background/95 backdrop-blur-md animate-fade-in"
             onClick={() => setSelectedFeature(null)}
           >
             <div
-              className="relative max-w-3xl w-full max-h-[90vh] overflow-y-auto bg-background-light border border-gold/30 rounded-sm shadow-gold-xl"
+              className="relative w-full max-w-4xl h-[90vh] max-h-[800px] flex flex-col bg-background-light border border-gold/30 rounded-sm shadow-gold-2xl"
               onClick={(e) => e.stopPropagation()}
             >
-              <button
-                onClick={() => setSelectedFeature(null)}
-                className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center text-parchment/70 hover:text-gold hover:bg-gold/10 transition-colors z-10"
-              >
-                <X size={20} />
-              </button>
-
-              <div className={cn('p-8 bg-gradient-to-br', categoryColors[selectedFeature.category])}>
-                <div className="flex items-start gap-6">
-                  <div className="w-20 h-20 rounded-full bg-background/50 flex items-center justify-center flex-shrink-0">
+              <div className={cn('flex items-center justify-between px-6 py-4 border-b border-gold/20 flex-shrink-0 bg-gradient-to-br', categoryColors[selectedFeature.category])}>
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-background/50 flex items-center justify-center flex-shrink-0">
                     {(() => {
                       const Icon = getIcon(selectedFeature.iconName);
-                      return <Icon size={40} className={categoryIconColors[selectedFeature.category]} />;
+                      return <Icon size={24} className={categoryIconColors[selectedFeature.category]} />;
                     })()}
                   </div>
-                  <div className="flex-1">
-                    <div className={cn('flex items-center gap-2 mb-2', categoryIconColors[selectedFeature.category])}>
+                  <div>
+                    <div className={cn('flex items-center gap-2 mb-1', categoryIconColors[selectedFeature.category])}>
                       {(() => {
                         const CatIcon = categoryIcons[selectedFeature.category];
-                        return CatIcon ? <CatIcon size={16} /> : null;
+                        return CatIcon ? <CatIcon size={14} /> : null;
                       })()}
-                      <span className="text-sm font-display tracking-wider">{selectedFeature.category}</span>
+                      <span className="text-xs font-display tracking-wider">{selectedFeature.category}</span>
                     </div>
-                    <h2 className="font-display text-3xl md:text-4xl text-parchment mb-4">
+                    <h2 className="font-display text-xl md:text-2xl text-parchment">
                       {selectedFeature.name}
                     </h2>
-                    <div className="flex gap-8">
-                      <div>
-                        <div className="text-xs text-gold-muted mb-1">仿制难度</div>
-                        <div className="flex gap-1">
-                          {[1, 2, 3, 4, 5].map((i) => (
-                            <div
-                              key={i}
-                              className={cn(
-                                'w-3 h-3 rounded-full',
-                                i <= selectedFeature.difficulty ? 'bg-gold' : 'bg-gold/20'
-                              )}
-                            />
-                          ))}
-                        </div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="hidden sm:flex gap-6">
+                    <div>
+                      <div className="text-xs text-gold-muted mb-1">仿制难度</div>
+                      <div className="flex gap-1">
+                        {[1, 2, 3, 4, 5].map((i) => (
+                          <div
+                            key={i}
+                            className={cn(
+                              'w-2.5 h-2.5 rounded-full',
+                              i <= selectedFeature.difficulty ? 'bg-gold' : 'bg-gold/20'
+                            )}
+                          />
+                        ))}
                       </div>
-                      <div>
-                        <div className="text-xs text-gold-muted mb-1">防伪效果</div>
-                        <div className="flex gap-1">
-                          {[1, 2, 3, 4, 5].map((i) => (
-                            <div
-                              key={i}
-                              className={cn(
-                                'w-3 h-3 rounded-full',
-                                i <= selectedFeature.effectiveness ? 'bg-emerald-400' : 'bg-emerald-400/20'
-                              )}
-                            />
-                          ))}
-                        </div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-gold-muted mb-1">防伪效果</div>
+                      <div className="flex gap-1">
+                        {[1, 2, 3, 4, 5].map((i) => (
+                          <div
+                            key={i}
+                            className={cn(
+                              'w-2.5 h-2.5 rounded-full',
+                              i <= selectedFeature.effectiveness ? 'bg-emerald-400' : 'bg-emerald-400/20'
+                            )}
+                          />
+                        ))}
                       </div>
                     </div>
                   </div>
+                  <button
+                    onClick={() => setSelectedFeature(null)}
+                    className="w-10 h-10 rounded-full flex items-center justify-center text-parchment/70 hover:text-gold hover:bg-gold/10 transition-all duration-300 flex-shrink-0 border border-gold/20 hover:border-gold/50 bg-background/30 backdrop-blur-sm"
+                    title="关闭"
+                  >
+                    <X size={20} />
+                  </button>
                 </div>
               </div>
 
-              <div className="p-8 space-y-8">
-                <section>
-                  <h3 className="font-display text-xl text-gold mb-3 flex items-center gap-2">
-                    <Lock size={18} />
-                    技术描述
-                  </h3>
-                  <p className="text-parchment/90 leading-relaxed font-body text-lg">
-                    {selectedFeature.description}
-                  </p>
-                </section>
+              <div className="flex-1 overflow-y-auto overflow-x-hidden">
+                <div className="p-6 md:p-8 space-y-8">
+                  <section>
+                    <h3 className="font-display text-xl text-gold mb-3 flex items-center gap-2">
+                      <Lock size={18} />
+                      技术描述
+                    </h3>
+                    <p className="text-parchment/90 leading-relaxed font-body text-lg">
+                      {selectedFeature.description}
+                    </p>
+                  </section>
 
-                <section>
-                  <h3 className="font-display text-xl text-gold mb-3 flex items-center gap-2">
-                    <Building2 size={18} />
-                    工作原理
-                  </h3>
-                  <p className="text-parchment/90 leading-relaxed font-body text-lg">
-                    {selectedFeature.principle}
-                  </p>
-                </section>
+                  <section>
+                    <h3 className="font-display text-xl text-gold mb-3 flex items-center gap-2">
+                      <Building2 size={18} />
+                      工作原理
+                    </h3>
+                    <p className="text-parchment/90 leading-relaxed font-body text-lg">
+                      {selectedFeature.principle}
+                    </p>
+                  </section>
 
-                <section>
-                  <h3 className="font-display text-xl text-gold mb-3 flex items-center gap-2">
-                    <Layers size={18} />
-                    常见类型
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedFeature.examples.map((example) => (
-                      <span
-                        key={example}
-                        className="px-4 py-2 bg-gold/10 text-gold border border-gold/20 rounded-sm text-sm"
-                      >
-                        {example}
-                      </span>
-                    ))}
+                  <section>
+                    <h3 className="font-display text-xl text-gold mb-3 flex items-center gap-2">
+                      <Layers size={18} />
+                      常见类型
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedFeature.examples.map((example) => (
+                        <span
+                          key={example}
+                          className="px-4 py-2 bg-gold/10 text-gold border border-gold/20 rounded-sm text-sm hover:border-gold/50 transition-colors"
+                        >
+                          {example}
+                        </span>
+                      ))}
+                    </div>
+                  </section>
+
+                  <section>
+                    <h3 className="font-display text-xl text-gold mb-3 flex items-center gap-2">
+                      <Activity size={18} />
+                      历史发展
+                    </h3>
+                    <p className="text-parchment/90 leading-relaxed font-body text-lg drop-cap">
+                      {selectedFeature.history}
+                    </p>
+                  </section>
+                </div>
+              </div>
+
+              <div className="px-6 py-3 border-t border-gold/20 flex items-center justify-end flex-shrink-0 bg-gradient-to-r from-gold/5 via-transparent to-gold/5">
+                <div className="flex sm:hidden gap-6 mr-4">
+                  <div>
+                    <div className="text-xs text-gold-muted mb-1">仿制难度</div>
+                    <div className="flex gap-1">
+                      {[1, 2, 3, 4, 5].map((i) => (
+                        <div
+                          key={i}
+                          className={cn(
+                            'w-2 h-2 rounded-full',
+                            i <= selectedFeature.difficulty ? 'bg-gold' : 'bg-gold/20'
+                          )}
+                        />
+                      ))}
+                    </div>
                   </div>
-                </section>
-
-                <section>
-                  <h3 className="font-display text-xl text-gold mb-3 flex items-center gap-2">
-                    <Activity size={18} />
-                    历史发展
-                  </h3>
-                  <p className="text-parchment/90 leading-relaxed font-body text-lg drop-cap">
-                    {selectedFeature.history}
-                  </p>
-                </section>
+                  <div>
+                    <div className="text-xs text-gold-muted mb-1">防伪效果</div>
+                    <div className="flex gap-1">
+                      {[1, 2, 3, 4, 5].map((i) => (
+                        <div
+                          key={i}
+                          className={cn(
+                            'w-2 h-2 rounded-full',
+                            i <= selectedFeature.effectiveness ? 'bg-emerald-400' : 'bg-emerald-400/20'
+                          )}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setSelectedFeature(null)}
+                  className="btn-gold-solid h-10 px-5 text-sm"
+                >
+                  了解更多防伪技术
+                </button>
               </div>
             </div>
           </div>

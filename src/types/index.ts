@@ -58,6 +58,7 @@ export interface FilterState {
   yearTo: number | null;
   denomination: string;
   material: string;
+  designElement: string;
   sortBy: 'year' | 'country' | 'favorite';
   sortOrder: 'asc' | 'desc';
 }

@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { Search, Filter, X, ArrowUpDown } from 'lucide-react';
 import { useFilterStore } from '@/store/useFilterStore';
 import { useBanknoteStore } from '@/store/useBanknoteStore';
-import { countries, materials } from '@/data/countries';
+import { countries, materials, designElementOptions } from '@/data/countries';
 import { getDenominations } from '@/data/banknotes';
 import { cn } from '@/utils/cn';
 
@@ -19,6 +19,7 @@ export default function FilterBar({ showSearch = true, className }: FilterBarPro
     yearTo,
     denomination,
     material,
+    designElement,
     sortBy,
     sortOrder,
     setSearch,
@@ -27,6 +28,7 @@ export default function FilterBar({ showSearch = true, className }: FilterBarPro
     setYearTo,
     setDenomination,
     setMaterial,
+    setDesignElement,
     setSortBy,
     setSortOrder,
     resetFilters,
@@ -36,7 +38,7 @@ export default function FilterBar({ showSearch = true, className }: FilterBarPro
   const years = useMemo(() => getYears(), [getYears]);
   const denoms = useMemo(() => getDenominations(), []);
 
-  const hasActiveFilters = search || country || yearFrom || yearTo || denomination || (material && material !== '全部');
+  const hasActiveFilters = search || country || yearFrom || yearTo || denomination || (material && material !== '全部') || (designElement && designElement !== '全部');
 
   const sortOptions = [
     { value: 'favorite', label: '收藏数' },
@@ -53,13 +55,13 @@ export default function FilterBar({ showSearch = true, className }: FilterBarPro
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="搜索国家、面值、年份、图案..."
+            placeholder="搜索国家、面值、年份、图案、设计元素..."
             className="w-full bg-background border border-gold/20 rounded-sm pl-12 pr-4 py-3 text-parchment placeholder:text-gold-muted/50 focus:outline-none focus:border-gold/50 transition-all"
           />
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4 mb-6">
         <div>
           <label className="block text-sm text-gold-muted mb-2 font-display tracking-wider">国家</label>
           <select
@@ -134,6 +136,21 @@ export default function FilterBar({ showSearch = true, className }: FilterBarPro
             {materials.map((m) => (
               <option key={m} value={m}>
                 {m}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-sm text-gold-muted mb-2 font-display tracking-wider">设计元素</label>
+          <select
+            value={designElement}
+            onChange={(e) => setDesignElement(e.target.value)}
+            className="w-full bg-background border border-gold/20 rounded-sm px-4 py-2.5 text-parchment focus:outline-none focus:border-gold/50 transition-all cursor-pointer"
+          >
+            {designElementOptions.map((d) => (
+              <option key={d} value={d}>
+                {d}
               </option>
             ))}
           </select>

@@ -18,6 +18,7 @@ export default function BanknoteList() {
     const yearToParam = searchParams.get('yearTo');
     const denominationParam = searchParams.get('denomination');
     const materialParam = searchParams.get('material');
+    const designElementParam = searchParams.get('designElement');
 
     if (searchQuery) filters.setSearch(searchQuery);
     if (countryParam) filters.setCountry(countryParam);
@@ -25,6 +26,7 @@ export default function BanknoteList() {
     if (yearToParam) filters.setYearTo(Number(yearToParam));
     if (denominationParam) filters.setDenomination(denominationParam);
     if (materialParam) filters.setMaterial(materialParam);
+    if (designElementParam) filters.setDesignElement(designElementParam);
   }, [searchParams, filters]);
 
   useEffect(() => {
@@ -35,9 +37,10 @@ export default function BanknoteList() {
     if (filters.yearTo !== null) params.yearTo = filters.yearTo.toString();
     if (filters.denomination) params.denomination = filters.denomination;
     if (filters.material && filters.material !== '全部') params.material = filters.material;
+    if (filters.designElement && filters.designElement !== '全部') params.designElement = filters.designElement;
     
     setSearchParams(params, { replace: true });
-  }, [filters.search, filters.country, filters.yearFrom, filters.yearTo, filters.denomination, filters.material, setSearchParams]);
+  }, [filters.search, filters.country, filters.yearFrom, filters.yearTo, filters.denomination, filters.material, filters.designElement, setSearchParams]);
 
   const filteredBanknotes = useMemo(() => {
     return filterBanknotes({
@@ -47,6 +50,7 @@ export default function BanknoteList() {
       yearTo: filters.yearTo,
       denomination: filters.denomination,
       material: filters.material,
+      designElement: filters.designElement,
       sortBy: filters.sortBy,
       sortOrder: filters.sortOrder,
     });
